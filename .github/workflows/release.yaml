@@ -18,6 +18,8 @@ jobs:
       contents: write
 
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v3
