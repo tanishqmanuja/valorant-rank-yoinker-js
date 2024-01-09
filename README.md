@@ -1,0 +1,34 @@
+![Logo](https://raw.github.com/tanishqmanuja/valorant-rank-yoinker-js/main/assets/banner.png?maxAge=2592000)
+
+# VRYJS //VALORANT RANK YOINKER JS
+
+VRYJS is a CLI tool for displaying your valorant match data - rank, peak rank, skins etc in real time. It is a minimal port (rewrite) of the OG project [VALORANT Rank Yoinker](https://github.com/zayKenyon/VALORANT-rank-yoinker) which is written in python.
+
+What makes this tool unique ?
+  - Automatic Reconnection
+  - Parallel Fetching
+  - Data Caching
+  - Logging
+  - Informative UI
+  - Configurable Plugins
+
+## 📦 Installation
+
+1. Download `vryjs.exe` from the latest [release](https://github.com/tanishqmanuja/valorant-rank-yoinker-js/releases/).
+2. Place the downloaded file in a separate folder because it generates temporary helper folder and files for caching, logging, executing etc.
+3. Run and Enjoy!
+
+## 🐱 Show your support
+
+Give a ⭐️ if this project helped you!
+
+## ❤️‍🔥 Infinite Thanks 
+
+Kudos to these awesome projects & the that made this possible.
+
+- [valorant-rank-yoinker](https://github.com/zayKenyon/VALORANT-rank-yoinker)
+- [valorant-api-docs](https://github.com/techchrism/valorant-api-docs)
+
+## 💀 Disclaimer
+
+THIS PROJECT IS NOT ASSOCIATED OR ENDORSED BY RIOT GAMES. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc. Whilst effort has been made to abide by Riot's API rules; you acknowledge that use of this software is done so at your own risk.

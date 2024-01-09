@@ -1,0 +1,10 @@
+# Ignore everything
+/*
+
+# Except
+!.github
+!src
+!scripts
+!tsconfig.json
+!turbo.json
+!.prettierrc.cjs

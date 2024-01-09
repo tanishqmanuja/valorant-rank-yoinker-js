@@ -1,0 +1,17 @@
+# deps
+node_modules
+
+# temp
+.turbo
+
+# output
+out
+
+# auto generated files
+pkg/vryjs/main.syso
+
+# vryjs
+bin
+cache
+logs
+config.yaml
