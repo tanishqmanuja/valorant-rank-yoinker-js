@@ -44,7 +44,9 @@ async function bundle() {
 }
 
 async function resource() {
-  const { exitCode } = await execa("goversioninfo", ["--help"]);
+  const { exitCode } = await execa("goversioninfo", ["--help"]).catch(() => ({
+    exitCode: 1,
+  }));
 
   if (exitCode !== 0) {
     console.log(" • ⚠️ Missing goversioninfo");
