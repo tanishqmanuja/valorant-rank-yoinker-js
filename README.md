@@ -39,7 +39,7 @@ Kudos to these awesome projects & the that made this possible.
 THIS PROJECT IS NOT ASSOCIATED OR ENDORSED BY RIOT GAMES. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc. Whilst effort has been made to abide by Riot's API rules; you acknowledge that use of this software is done so at your own risk.
 
 <!-- Shields -->
-[build-status-shield]: https://img.shields.io/github/actions/workflow/status/tanishqmanuja/valorant-rank-yoinker-js/release.yaml?branch=main&style=for-the-badge
+[build-status-shield]: https://img.shields.io/github/actions/workflow/status/tanishqmanuja/valorant-rank-yoinker-js/ci.yaml?branch=main&style=for-the-badge
 [downloads-shield]: https://img.shields.io/github/downloads/tanishqmanuja/valorant-rank-yoinker-js/total?style=for-the-badge&logo=github
 [downloads-url]: https://github.com/tanishqmanuja/valorant-rank-yoinker-js/releases/latest
 [language-shield]: https://img.shields.io/github/languages/top/tanishqmanuja/valorant-rank-yoinker-js?style=for-the-badge
