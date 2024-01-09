@@ -29,12 +29,6 @@ func RootCommand() *cobra.Command {
 				os.Exit(1)
 			}
 
-			if version, err := internal.GetVryJSBundleVersion(); err != nil {
-				os.Exit(1)
-			} else {
-				fmt.Printf("==> vryjs version: %s\n", version)
-			}
-
 			internal.RunVryJS()
 		},
 	}
