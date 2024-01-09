@@ -1,5 +1,6 @@
 /* NOTE: THIS IS A SINGLETON MODULE & CONTAINS SIDE EFFECTS */
 import chalk from "chalk";
+import cliCursor from "cli-cursor";
 
 import { LOGGER } from "~/logger";
 import { isDevelopment } from "~/shared/environment";
@@ -56,6 +57,11 @@ process.on("exit", code => {
   } else {
     console.log(TAGS.vryjs, `Thank you :)\n`);
   }
+
+  // manually reset terminal settings
+  process.stdin.setRawMode(false);
+  process.stdin.resume();
+  cliCursor.show();
 
   process.exit(code);
 });
