@@ -5,8 +5,6 @@ import { join } from "path";
 import { LOGGER } from "~/logger";
 import { isProcessRunning } from "~/utils/process";
 
-import { TAGS } from "./tags";
-
 const FALLBACK_RIOT_CLIENT_PATH =
   "C:/Riot Games/Riot Client/RiotClientServices.exe";
 
