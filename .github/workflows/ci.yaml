@@ -64,6 +64,11 @@ jobs:
         with:
           length: 6
 
+      - name: Fix Artifacts
+        run: |
+          mkdir -p out/bin
+          mv out/vryjs.mjs out/bin
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
