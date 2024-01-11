@@ -1,0 +1,19 @@
+name: Setup Go
+description: Setup Go and Install dependencies
+inputs:
+  go-version:
+    description: Go version
+    default: "stable"
+
+runs:
+  using: composite
+
+  steps:
+    - name: Setup Golang (${{ inputs.go-version }})
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ inputs.go-version }}
+
+    - name: Install dependencies
+      shell: bash
+      run: go mod download

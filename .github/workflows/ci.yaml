@@ -7,7 +7,14 @@ on:
     paths-ignore:
       - ".vscode/**"
       - "docs/**"
-      - "assets/**"
+      - "README.md"
+
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - ".vscode/**"
+      - "docs/**"
       - "README.md"
 
 jobs:
@@ -29,7 +36,7 @@ jobs:
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
-      - name: Setup ENV
+      - name: Setup ENV Vars
         run: |
           echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
           echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
@@ -37,12 +44,19 @@ jobs:
       - name: Setup Node Stuff
         uses: ./.github/actions/setup-node
         with:
-          node: ${{ env.NODE_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup Golang Stuff
-        uses: ./.github/actions/setup-golang
+      - name: Setup Go Stuff
+        uses: ./.github/actions/setup-go
         with:
-          golang: "1.21.5"
+          go-version: "1.21.5"
 
       - name: Build
         run: pnpm turbo build
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: vryjs-${{ github.ref }}
+          path: |
+            out/**
