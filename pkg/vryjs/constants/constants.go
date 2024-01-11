@@ -6,6 +6,7 @@ const (
 )
 
 var (
+	VERSION    = "0.0.0"
 	REPOSITORY = struct {
 		Owner string
 		Name  string

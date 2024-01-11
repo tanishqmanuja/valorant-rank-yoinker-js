@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"vryjs/pkg/vryjs/cmd/root"
 
 	"github.com/spf13/cobra"
@@ -17,6 +18,6 @@ func main() {
 	rootCmd.CompletionOptions.HiddenDefaultCmd = true
 
 	if err := rootCmd.Execute(); err != nil {
-		panic(err)
+		os.Exit(1)
 	}
 }

@@ -5,9 +5,13 @@ import (
 	"fmt"
 	"os"
 	"vryjs/pkg/vryjs/cmd/update"
+	"vryjs/pkg/vryjs/cmd/upgrade"
+	"vryjs/pkg/vryjs/cmd/version"
+	"vryjs/pkg/vryjs/constants"
 	"vryjs/pkg/vryjs/internal"
 
 	"github.com/spf13/cobra"
+	"golang.org/x/mod/semver"
 )
 
 //go:embed banner.txt
@@ -25,15 +29,28 @@ func RootCommand() *cobra.Command {
 				os.Exit(1)
 			}
 
-			if err := internal.EnsureVryJSBinaryExists(); err != nil {
+			if err := internal.EnsureVryJSBundleExists(); err != nil {
 				os.Exit(1)
+			}
+
+			if bundleVersion, err := internal.GetVryJSBundleVersion(); err != nil {
+				fmt.Println("==> Unable to read bundle version, bundle may be corrupt.")
+				os.Exit(1)
+			} else {
+				localVersion := fmt.Sprintf("v%s", constants.VERSION)
+				bundleVersion = fmt.Sprintf("v%s", bundleVersion)
+				if semver.Compare(localVersion, bundleVersion) > 0 {
+					internal.WriteFallbackVryJSBundle()
+				}
 			}
 
 			internal.RunVryJS()
 		},
 	}
 
+	cmd.AddCommand(version.VersionCommand())
 	cmd.AddCommand(update.UpdateCommand())
+	cmd.AddCommand(upgrade.UpgradeCommand())
 
 	return cmd
 }

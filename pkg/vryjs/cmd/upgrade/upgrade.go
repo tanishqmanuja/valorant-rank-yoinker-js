@@ -1,4 +1,4 @@
-package update
+package upgrade
 
 import (
 	"fmt"
@@ -8,13 +8,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func UpdateCommand() *cobra.Command {
+func UpgradeCommand() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update",
-		Short: "Update to latest version",
-		Long:  "Updates vryjs bundle to the latest version.",
+		Use:   "upgrade",
+		Short: "Upgrade to latest version",
+		Long:  "Upgrades vryjs cli binary to the latest version.",
 		Run: func(cmd *cobra.Command, args []string) {
-			err := internal.UpdateVryJSBundle()
+			err := internal.UpdateSelf()
 			if err != nil {
 				fmt.Printf("Error: %s\n", err)
 				os.Exit(1)

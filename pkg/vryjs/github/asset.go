@@ -21,13 +21,13 @@ func GetLatestRelease(repo Repo) (*gh.RepositoryRelease, error) {
 	return release, nil
 }
 
-func DownloadLatestRelease(repo Repo, assetName, downloadpath string) error {
+func DownloadLatestRelease(repo Repo, assetName, downloadpath string) (string, error) {
 	client := gh.NewClient(nil)
 
 	release, _, err := client.Repositories.GetLatestRelease(context.Background(), constants.REPO_OWNER, constants.REPO_NAME)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// Find the asset by name
@@ -40,8 +40,13 @@ func DownloadLatestRelease(repo Repo, assetName, downloadpath string) error {
 	}
 
 	if asset == nil {
-		return fmt.Errorf("asset not found")
+		return "", fmt.Errorf("asset not found")
 	}
 
-	return utils.DownloadFileWithProgress(*asset.BrowserDownloadURL, downloadpath)
+	err = utils.DownloadFileWithProgress(*asset.BrowserDownloadURL, downloadpath)
+	if err != nil {
+		return "", err
+	}
+
+	return release.GetTagName(), nil
 }
