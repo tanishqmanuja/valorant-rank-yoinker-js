@@ -106,9 +106,14 @@ export class PluginManager {
     // Set Intial Row and Column Ids
     this.table.rowIds = this.table.data.prefetched.uuids;
     const columnOrder = Object.keys(this.table.config.plugins);
-    this.table.colIds = [...this.table.headers.keys()].toSorted(
-      (a, b) => columnOrder.indexOf(a) - columnOrder.indexOf(b),
-    );
+    this.table.colIds = [...this.table.headers.keys()]
+      .map(c => c.split("@"))
+      .toSorted(
+        (a, b) =>
+          columnOrder.indexOf(a[0]!) - columnOrder.indexOf(b[0]!) ||
+          (a[1] ? +a[1] : 0) - (b[1] ? +b[1] : 0),
+      )
+      .map(c => c.join("@"));
 
     const plugins = this.active.filter(p => p.type === "post");
     const executed = new Set<string>();

@@ -4,6 +4,7 @@ import { ValorantApi } from "~/api";
 import { GAMESTATES, Weapon } from "~/api/types";
 import { SkinsEntity } from "~/entities/definitions/skins.entity";
 import { inject } from "~/shared/dependencies";
+import { ensureArray } from "~/utils/array";
 import { RGBTuple } from "~/utils/colors";
 
 import { definePlugin } from "../types/plugin.interface";
@@ -19,33 +20,46 @@ export const PlayerSkinsPlugin = definePlugin({
 
       const api = inject(ValorantApi);
 
-      const selectedWeapon =
-        api.content.weapons.find(
-          w => w.displayName.toLowerCase() === config.weapon?.toLowerCase(),
-        )?.displayName ?? "Vandal";
+      const selectedWeapons = parseWeapons(
+        api,
+        ensureArray(config.weapons),
+      ).filter(Boolean) as Weapon[];
 
       const entities = await table.entityManager.getEntitiesForPlayers(data, [
         SkinsEntity,
       ]);
 
-      for (const puuid in entities) {
-        const { skins } = entities[puuid]!;
+      selectedWeapons.forEach((weapon, index) => {
+        const colId = `${PLUGIN_ID}@${index}`;
+        for (const puuid in entities) {
+          const { skins } = entities[puuid]!;
 
-        if (!skins) {
-          continue;
+          if (!skins) {
+            continue;
+          }
+
+          table.grid.setCell({
+            rowId: puuid,
+            colId,
+            value: formatSkin({ skins, selected: weapon.displayName }),
+          });
         }
 
-        table.grid.setCell({
-          rowId: puuid,
-          colId: PLUGIN_ID,
-          value: formatSkin({ skins, selected: selectedWeapon }),
-        });
-      }
-
-      table.headers.set(PLUGIN_ID, selectedWeapon);
+        table.headers.set(colId, weapon.displayName);
+      });
     },
   },
 });
+
+/* Parser */
+
+function parseWeapons(api: ValorantApi, names: string[]) {
+  return names.map(name =>
+    api.content.weapons.find(
+      w => w.displayName.toLowerCase() === name?.toLowerCase(),
+    ),
+  );
+}
 
 /* Formatter */
 

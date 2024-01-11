@@ -12,7 +12,7 @@ plugins:
   player-agent: true
   player-name: true
   player-skins:
-    weapon: Phantom
+    weapons: [Phantom]
   
   # Styles: short, long 
   player-rank:
