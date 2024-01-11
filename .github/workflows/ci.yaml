@@ -58,9 +58,15 @@ jobs:
       - name: Build
         run: pnpm turbo build
 
+      - name: Get Short SHA
+        uses: benjlevesque/short-sha@v2.2
+        id: short-sha
+        with:
+          length: 6
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: vryjs-${{ github.ref }}
+          name: vryjs-${{ steps.short-sha.outputs.sha }}
           path: |
             out/**
