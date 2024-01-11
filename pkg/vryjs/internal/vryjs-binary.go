@@ -92,7 +92,7 @@ func UpdateVryJSBundle() error {
 			return err
 		}
 
-		latestRelease, err := github.GetLatestRelease(constants.REPOSITORY, "vryjs.mjs")
+		latestRelease, err := github.GetLatestRelease(constants.REPOSITORY)
 
 		if err != nil {
 			return err

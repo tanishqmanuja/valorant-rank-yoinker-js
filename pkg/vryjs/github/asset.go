@@ -9,7 +9,7 @@ import (
 	gh "github.com/google/go-github/v57/github"
 )
 
-func GetLatestRelease(repo Repo, assetName string) (*gh.RepositoryRelease, error) {
+func GetLatestRelease(repo Repo) (*gh.RepositoryRelease, error) {
 	client := gh.NewClient(nil)
 
 	release, _, err := client.Repositories.GetLatestRelease(context.Background(), constants.REPO_OWNER, constants.REPO_NAME)
