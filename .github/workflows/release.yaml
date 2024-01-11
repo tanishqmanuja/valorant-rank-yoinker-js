@@ -25,30 +25,8 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Configure Git
-        run: |
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-
-      - name: Setup ENV vars
-        run: |
-          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-          echo "NODE_VERSION=$(cat .node-version)" >> $GITHUB_ENV
-
-      - name: Setup Node Stuff
-        uses: ./.github/actions/setup-node
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup Go Stuff
-        uses: ./.github/actions/setup-go
-        with:
-          go-version: "1.21.5"
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Build & Release
         run: pnpm release ${{ github.event.inputs.bump }}
