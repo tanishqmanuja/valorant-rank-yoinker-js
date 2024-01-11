@@ -82,14 +82,25 @@ async function resource() {
 }
 
 async function executable() {
-  return execa("go", ["build", "-o", EXECUTABLE_PATH, "./pkg/vryjs"], {
-    stdio: "inherit",
-    env: {
-      ...process.env,
-      GOOS: "windows",
-      GOARCH: "amd64",
+  return execa(
+    "go",
+    [
+      "build",
+      "-ldflags",
+      `-X vryjs/pkg/vryjs/constants.VERSION=${VERSION}`,
+      "-o",
+      EXECUTABLE_PATH,
+      "./pkg/vryjs",
+    ],
+    {
+      stdio: "inherit",
+      env: {
+        ...process.env,
+        GOOS: "windows",
+        GOARCH: "amd64",
+      },
     },
-  });
+  );
 }
 
 try {
