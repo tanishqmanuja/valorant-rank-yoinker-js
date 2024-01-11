@@ -70,6 +70,22 @@ func RunVryJS() {
 	os.Exit(0)
 }
 
+func RunVryJSCliCommand(command string) {
+	cmd := exec.Command(NODE_BINARY_PATH, "--no-warnings", VRYJS_BUNDLE_PATH, command)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = os.Environ()
+
+	err := cmd.Run()
+
+	if err != nil {
+		os.Exit(1)
+	}
+
+	os.Exit(0)
+}
+
 func UpdateVryJSBundle() error {
 	if utils.FileExists(VRYJS_BUNDLE_PATH) {
 		bundleVersion, err := GetVryJSBundleVersion()
@@ -116,7 +132,7 @@ func WriteFallbackVryJSBundle() error {
 		return err_fs
 	}
 
-	fmt.Printf("==> VryJS v%s bundle written [Fallback]", constants.VERSION)
+	fmt.Printf("==> VryJS v%s bundle written [Fallback]\n", constants.VERSION)
 	fmt.Print("\n")
 	return nil
 }

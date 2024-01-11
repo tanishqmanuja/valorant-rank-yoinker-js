@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"fmt"
 	"os"
+	"vryjs/pkg/vryjs/cmd/clean"
 	"vryjs/pkg/vryjs/cmd/update"
 	"vryjs/pkg/vryjs/cmd/upgrade"
 	"vryjs/pkg/vryjs/cmd/version"
@@ -51,6 +52,7 @@ func RootCommand() *cobra.Command {
 	cmd.AddCommand(version.VersionCommand())
 	cmd.AddCommand(update.UpdateCommand())
 	cmd.AddCommand(upgrade.UpgradeCommand())
+	cmd.AddCommand(clean.CleanCommand())
 
 	return cmd
 }
