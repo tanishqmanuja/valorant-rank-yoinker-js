@@ -2,6 +2,7 @@ import { exec } from "child_process";
 import { readFile } from "fs/promises";
 import { join } from "path";
 
+import { LOGGER } from "~/logger";
 import { isProcessRunning } from "~/utils/process";
 
 import { TAGS } from "./tags";
@@ -14,6 +15,8 @@ const RIOT_CLIENT_INSTALLS_FILE_PATH = join(
   "Riot Games",
   "RiotClientInstalls.json",
 );
+
+const logger = LOGGER.forModule("Helpers");
 
 export async function getRiotClientPath(): Promise<string> {
   return readFile(RIOT_CLIENT_INSTALLS_FILE_PATH, { encoding: "utf-8" })
@@ -31,10 +34,16 @@ export async function autoStartValorant() {
   const isValorantRunning = await isProcessRunning("valorant.exe");
 
   if (isValorantRunning) {
-    console.log(TAGS.info, "Valorant is already running\n");
+    logger.info("Valorant is already running");
     return;
   }
 
-  console.log(TAGS.info, "Starting Valorant\n");
-  return getRiotClientPath().then(launchValorant);
+  return getRiotClientPath()
+    .then(launchValorant)
+    .then(() => {
+      logger.info("Auto-started Valorant");
+    })
+    .catch(e => {
+      logger.error("Failed to auto-start Valorant", e);
+    });
 }
