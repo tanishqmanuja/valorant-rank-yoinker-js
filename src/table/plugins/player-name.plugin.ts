@@ -1,9 +1,11 @@
 import chalk from "chalk";
 import { match } from "ts-pattern";
 
+import { ValorantApi } from "~/api";
 import { GAMESTATES, type KnownGameStates } from "~/api/types";
 import { NameEntity } from "~/entities/definitions/name.entity";
 import { RemarksEntity } from "~/entities/definitions/remarks.entity";
+import { inject } from "~/shared/dependencies";
 import { isStreamerModeEnabled } from "~/shared/environment";
 import type { RGBTuple } from "~/utils/colors";
 
@@ -15,6 +17,8 @@ export const PlayerNamePlugin = definePlugin({
   id: PLUGIN_ID,
   hooks: {
     onState: async ({ data, table }) => {
+      const api = inject(ValorantApi);
+
       const entities = await table.entityManager.getEntitiesForPlayers(data, [
         NameEntity,
         RemarksEntity,
@@ -29,7 +33,7 @@ export const PlayerNamePlugin = definePlugin({
           value: formatName({
             name: name.value,
             state: data._state,
-            isHidden: name.isHidden,
+            isHidden: name.isHidden && puuid !== api.puuid,
             isAlly: remarks?.isAlly,
           }),
         });
