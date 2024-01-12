@@ -24,6 +24,12 @@ What makes this tool unique ?
 2. Place the downloaded file in a separate folder because it generates temporary helper folder and files for caching, logging, executing etc.
 3. Run and Enjoy!
 
+## 📸 Glimpse of the CLI
+
+![CLI](https://raw.github.com/tanishqmanuja/valorant-rank-yoinker-js/main/assets/glimpse.png)
+
+> Names redacted for obvious reasons.
+
 ## 🐱 Show your support
 
 Give a ⭐️ if this project helped you!
