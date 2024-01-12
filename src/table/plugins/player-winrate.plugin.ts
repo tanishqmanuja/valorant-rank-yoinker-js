@@ -49,7 +49,7 @@ function formatWinrate(opts: {
   return match(opts)
     .with(
       { games: 0 },
-      o => `${chalk.gray(winPercentage)} (${chalk.dim(o.games)})`,
+      o => `${chalk.gray(winPercentage)} ${chalk.dim(`(${o.games})`)}`,
     )
     .otherwise(
       o =>
