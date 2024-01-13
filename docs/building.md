@@ -1,5 +1,7 @@
 # Building Guide
 
+Building VryJS is as simple as it could be. However, if you still need help, feel free to contact me or open an issue on [github](https://github.com/tanishqmanuja/valorant-rank-yoinker-js/issues).
+
 ## Pre-requisites
 *  [Node.js](https://nodejs.org/en/)
 *  [pnpm](https://pnpm.io/)
