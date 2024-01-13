@@ -30,6 +30,17 @@ What makes this tool unique ?
 
 > Names redacted for obvious reasons.
 
+VryJS is a CLI tool, So here are some useful commands to know about.
+
+* `./vryjs.exe upgrade` - Update CLI to latest version 
+* `./vryjs.exe version` - Display CLI and Bundle version
+* `./vryjs.exe help` - Display help
+
+## 📖 Further Documentation
+
+* [Updating Guide](https://github.com/tanishqmanuja/valorant-rank-yoinker-js/blob/main/docs/updating.md)
+* [Building Guide](https://github.com/tanishqmanuja/valorant-rank-yoinker-js/blob/main/docs/building.md)
+
 ## 🐱 Show your support
 
 Give a ⭐️ if this project helped you!
