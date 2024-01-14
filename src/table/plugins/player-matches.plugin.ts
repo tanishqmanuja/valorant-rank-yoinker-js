@@ -52,7 +52,7 @@ type MatchOverview = { status: Status; score: Score };
 
 function formatMatches(matches: MatchOverview[]) {
   if (matches.length === 0) {
-    return chalk.dim(" • • • ");
+    return chalk.dim("•  •  •");
   }
 
   return matches.map(formatMatch).join(chalk.gray(" • "));

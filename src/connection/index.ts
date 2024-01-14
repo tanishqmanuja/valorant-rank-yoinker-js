@@ -49,6 +49,7 @@ export class ValorantConnection {
 
   private async connect(spinner?: Ora) {
     logger.info("Connecting");
+    LOGGER.API.info("Connecting");
 
     // API Setup
     const upstreamApi = await createValorantApiClient(VAPIC_OPTIONS).catch(
@@ -57,6 +58,7 @@ export class ValorantConnection {
       },
     );
     logger.info("API connected");
+    LOGGER.API.info("Connected");
 
     modifyApiBehaviour(upstreamApi);
     const simplifiedApi = await createValorantApi(upstreamApi);

@@ -53,6 +53,8 @@ export async function doBootstrap() {
     connection.close();
   });
 
+  LOGGER.API.info("Authenticated");
+
   const globalSpinner = register(GlobalSpinner, ora());
   onExit(() => {
     if (globalSpinner.isSpinning) {
