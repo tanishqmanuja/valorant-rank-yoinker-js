@@ -16,8 +16,13 @@ import { sleep } from "./utils/promise";
 const logger = LOGGER.CLI;
 
 console.log(
-  chalk.whiteBright.bold(`Valorant Rank Yoinker JS v${env.version}\n`),
+  chalk.whiteBright.bold(
+    `Valorant Rank Yoinker JS v${env.version}`.concat(
+      isDevelopment() ? "-DEV" : "",
+    ),
+  ),
 );
+process.stdout.write("\n");
 logger.info("Starting VALORANT Rank Yoinker JS");
 
 try {
