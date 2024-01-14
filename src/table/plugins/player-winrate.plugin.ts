@@ -10,10 +10,14 @@ const COLUMN_NAME = "WR(%)";
 export const PlayerWinratePlugin = definePlugin({
   id: PLUGIN_ID,
   hooks: {
-    onState: async ({ data, table }) => {
-      const entities = await table.entityManager.getEntitiesForPlayers(data, [
-        WinrateEntity,
-      ]);
+    onState: async ({ data, table, config }) => {
+      const entities = await table.entityManager.getEntitiesForPlayers(
+        data,
+        [WinrateEntity],
+        {
+          [WinrateEntity.id]: { queue: config.queue },
+        },
+      );
 
       for (const puuid in entities) {
         const { winrate } = entities[puuid]!;

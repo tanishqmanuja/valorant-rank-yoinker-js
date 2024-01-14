@@ -6,12 +6,16 @@ import { inject } from "~/shared/dependencies";
 export const WinrateEntity = definePlayerEntity({
   id: "winrate",
   hooks: {
-    onState: ({ player, data }) => {
+    onState: ({ player, data, config }) => {
       const api = inject(ValorantApi);
 
       const mmr = data.prefetched.mmrs.find(p => p.Subject === player.Subject)!;
 
-      return api.helpers.getPlayerWinInfo(mmr);
+      if (config.queue === "all") {
+        return api.helpers.getPlayerWinInfo(mmr);
+      }
+
+      return api.helpers.getPlayerCompetitiveWinInfo(mmr);
     },
   },
 });

@@ -108,3 +108,34 @@ export function getPlayerWinInfo(
     totalGames,
   };
 }
+
+export function getPlayerCompetitiveWinInfo(
+  this: ValorantApi,
+  mmr: PlayerMMR,
+  seasonId?: Season["ID"],
+): WinInfo {
+  seasonId = seasonId ?? this.helpers.getCurrentSeasonAct().ID;
+  let totalWins = 0;
+  let totalGames = 0;
+
+  const competitiveQueue = mmr.QueueSkills.competitive;
+  if (!competitiveQueue?.SeasonalInfoBySeasonID) {
+    return { ratio: 0, totalGames, totalWins };
+  }
+
+  Object.values(competitiveQueue.SeasonalInfoBySeasonID ?? {}).forEach(
+    season => {
+      if (!seasonId || season.SeasonID === seasonId) {
+        totalWins += season.NumberOfWinsWithPlacements;
+        totalGames += season.NumberOfGames;
+      }
+    },
+  );
+
+  const winRate = totalWins / totalGames;
+  return {
+    ratio: Number.isNaN(winRate) ? 0 : winRate,
+    totalWins,
+    totalGames,
+  };
+}
