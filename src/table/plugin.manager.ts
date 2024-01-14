@@ -8,6 +8,7 @@ import { PlayerAgentPlugin } from "./plugins/player-agent.plugin";
 import { PlayerLevelPlugin } from "./plugins/player-level.plugin";
 import { PlayerMatchesPlugin } from "./plugins/player-matches.plugin";
 import { PlayerNamePlugin } from "./plugins/player-name.plugin";
+import { PlayerPartyPlugin } from "./plugins/player-party.plugin";
 import { PlayerPeakRankPlugin } from "./plugins/player-peak-rank.plugin";
 import { PlayerRankPlugin } from "./plugins/player-rank.plugin";
 import { PlayerRRPlugin } from "./plugins/player-rr.plugin";
@@ -24,6 +25,7 @@ export const STATE_HOOK_MAP = {
 } as const;
 
 const INBUILT_PLUGINS: PluginDefinition[] = [
+  PlayerPartyPlugin,
   PlayerAgentPlugin,
   PlayerNamePlugin,
   PlayerRankPlugin,

@@ -9,6 +9,7 @@ features:
 
 # Plugins are loaded in order
 plugins:
+  player-party: true
   player-agent: true
   player-name: true
   player-skins:
