@@ -16,6 +16,12 @@ import {
 
 const logger = LOGGER.forModule("Player Entity");
 
+const retry = <T>(x: Promise<T>) =>
+  retryPromise<T>(x, {
+    count: 2,
+    delay: (_, n) => timer((2 + 2 * n) * 1000),
+  });
+
 export class EntityManager {
   private lastKnownDataHash = "";
   private cache = new Map();
@@ -62,20 +68,16 @@ export class EntityManager {
 
     const isPromiseLike = isAsyncFunction(hook) || isPromise(hook);
     if (isPromiseLike) {
-      entities = await retryPromise(
-        Promise.all(
-          players.map(player => {
-            return (hook as TFunction)({
+      entities = await Promise.all(
+        players.map(player => {
+          return retry<any>(
+            (hook as TFunction)({
               player,
               data,
               config: config,
-            })!;
-          }),
-        ),
-        {
-          count: 2,
-          delay: (_, n) => timer((2 + 2 * n) * 1000),
-        },
+            })!,
+          );
+        }),
       );
     } else {
       entities = players.map(player => {
