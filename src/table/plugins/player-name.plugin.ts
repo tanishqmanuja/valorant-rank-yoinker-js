@@ -7,6 +7,7 @@ import { NameEntity } from "~/entities/definitions/name.entity";
 import { RemarksEntity } from "~/entities/definitions/remarks.entity";
 import { inject } from "~/shared/dependencies";
 import { isStreamerModeEnabled } from "~/shared/environment";
+import { PartyService } from "~/shared/services/party.service";
 import type { RGBTuple } from "~/utils/colors";
 
 import { definePlugin } from "../types/plugin.interface";
@@ -18,6 +19,7 @@ export const PlayerNamePlugin = definePlugin({
   hooks: {
     onState: async ({ data, table }) => {
       const api = inject(ValorantApi);
+      const partyService = inject(PartyService);
 
       const entities = await table.entityManager.getEntitiesForPlayers(data, [
         NameEntity,
@@ -35,6 +37,7 @@ export const PlayerNamePlugin = definePlugin({
             state: data._state,
             isHidden: name.isHidden && puuid !== api.puuid,
             isAlly: remarks?.isAlly,
+            isInMyParty: partyService.isInMyParty(puuid) || puuid === api.puuid,
           }),
         });
       }
@@ -55,9 +58,11 @@ function formatName(opts: {
   state: KnownGameStates;
   isHidden: boolean;
   isAlly?: boolean;
+  isInMyParty?: boolean;
 }) {
   let str = match(opts)
     .with({ state: GAMESTATES.MENUS }, o => chalk.rgb(...PARTY_COLOR)(o.name))
+    .with({ isInMyParty: true }, o => chalk.rgb(...PARTY_COLOR)(o.name))
     .with({ isHidden: true }, isStreamerModeEnabled, () => chalk.dim("Hidden"))
     .with(
       { state: GAMESTATES.PREGAME },

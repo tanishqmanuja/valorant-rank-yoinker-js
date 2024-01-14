@@ -5,6 +5,7 @@ import { ValorantApi } from "~/api";
 import { LevelEntity } from "~/entities/definitions/level.entity";
 import { inject } from "~/shared/dependencies";
 import { isStreamerModeEnabled } from "~/shared/environment";
+import { PartyService } from "~/shared/services/party.service";
 
 import { definePlugin } from "../types/plugin.interface";
 
@@ -15,6 +16,7 @@ export const PlayerLevelPlugin = definePlugin({
   hooks: {
     onState: async ({ data, table }) => {
       const api = inject(ValorantApi);
+      const partyService = inject(PartyService);
 
       const entities = await table.entityManager.getEntitiesForPlayers(data, [
         LevelEntity,
@@ -28,7 +30,10 @@ export const PlayerLevelPlugin = definePlugin({
           colId: PLUGIN_ID,
           value: formatLevel({
             level: level.value,
-            isHidden: level.hidden && puuid !== api.puuid,
+            isHidden:
+              level.hidden &&
+              puuid !== api.puuid &&
+              !partyService.isInMyParty(puuid),
           }),
         });
       }

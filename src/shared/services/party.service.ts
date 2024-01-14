@@ -72,6 +72,12 @@ export class PartyService {
     return [...this.#parties.values()];
   }
 
+  isInMyParty(puuid: string) {
+    return this.getParties()
+      .filter(p => p.players.includes(this.api.puuid))
+      .some(p => p.players.includes(puuid));
+  }
+
   clear({ except }: { except?: string[] } = {}) {
     if (except) {
       this.#parties.forEach(p => {
