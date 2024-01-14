@@ -61,9 +61,13 @@ export function modifyApiBehaviour(api: ValorantApiClient) {
 }
 
 async function refreshTokens(api: ValorantApiClient, error: AxiosError) {
+  logger.info("Refreshing tokens");
+
   const authProvider = provideAuthViaLocalApi();
 
   const { accessToken, entitlementsToken } = await authProvider(api);
+
+  LOGGER.API.info("Refreshed tokens");
 
   // Set for whole instance
   api.remote.reinitialize({
@@ -84,10 +88,8 @@ async function refreshTokens(api: ValorantApiClient, error: AxiosError) {
       authHeaders,
     );
 
-    // error is also equivalent to failed request config,
-    // so we can resolve with it.
-    Promise.resolve(error);
+    return Promise.resolve();
   }
 
-  Promise.reject(error);
+  return Promise.reject(error);
 }
