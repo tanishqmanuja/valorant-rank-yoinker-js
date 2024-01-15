@@ -1,5 +1,6 @@
 import { BuildOptions, build } from "esbuild";
 import { execa } from "execa";
+import { copyFile } from "fs/promises";
 import pkg from "package.json";
 
 const VERSION = pkg.version ?? "0.0.0";
@@ -7,6 +8,7 @@ const [VERSION_MAJOR = "", VERSION_MINOR = "", VERSION_PATCH = ""] =
   VERSION.split(".");
 
 const BUNDLE_PATH = "./out/vryjs.mjs";
+const COPY_BUNDLE_PATH = "./bin/vryjs.mjs";
 const EXECUTABLE_PATH = "./out/vryjs.exe";
 
 const isProduction =
@@ -14,6 +16,7 @@ const isProduction =
   process.argv.slice(2).includes("--prod");
 
 const makeBinary = process.argv.slice(2).includes("--bin");
+const copyBundle = process.argv.slice(2).includes("--copy");
 
 const ESM_FIX_BANNER = `
 // ESM Fixes
@@ -120,6 +123,13 @@ try {
     "🥳 Build success",
     `[ ${(performance.now() - start).toFixed(2)}ms ]`,
   );
+
+  if (copyBundle) {
+    await copyFile(BUNDLE_PATH, COPY_BUNDLE_PATH);
+    process.stdout.write("\n");
+    console.log(`📦 Copied ${BUNDLE_PATH} to ${COPY_BUNDLE_PATH}`);
+  }
+
   process.exit(0);
 } catch (e) {
   process.stdout.write("\n");
