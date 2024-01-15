@@ -15,8 +15,8 @@ import (
 	"golang.org/x/mod/semver"
 )
 
-const (
-	VRYJS_BUNDLE_PATH = "bin/vryjs.mjs"
+var (
+	VRYJS_BUNDLE_PATH = filepath.Join(constants.ROOT_DIR, "bin/vryjs.mjs")
 )
 
 func EnsureVryJSBundleExists() error {
@@ -55,7 +55,7 @@ func RunVryJS() {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.Env = os.Environ()
+	cmd.Env = append(os.Environ(), fmt.Sprintf("VRYJS_ROOT=%s", constants.ROOT_DIR))
 
 	err := cmd.Run()
 

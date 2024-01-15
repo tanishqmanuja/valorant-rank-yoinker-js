@@ -7,6 +7,7 @@ require (
 	github.com/go-resty/resty/v2 v2.11.0
 	github.com/google/go-github/v57 v57.0.0
 	github.com/inconshreveable/go-update v0.0.0-20160112193335-8152e7eb6ccf
+	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
 	github.com/schollz/progressbar/v3 v3.14.1
 	github.com/spf13/cobra v1.8.0
 )

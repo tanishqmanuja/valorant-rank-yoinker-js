@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 	"vryjs/pkg/vryjs/constants"
 	"vryjs/pkg/vryjs/github"
@@ -9,8 +10,11 @@ import (
 )
 
 const (
-	NODE_BINARY_PATH      = "bin/node.exe"
 	FALLBACK_NODE_VERSION = "v21.2.0"
+)
+
+var (
+	NODE_BINARY_PATH = filepath.Join(constants.ROOT_DIR, "bin/node.exe")
 )
 
 func EnsureNodeBinaryExists() error {
