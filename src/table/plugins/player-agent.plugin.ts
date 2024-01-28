@@ -4,6 +4,7 @@ import { match } from "ts-pattern";
 import { ValorantApi } from "~/api";
 import { GAMESTATES, KnownGameStates } from "~/api/types";
 import { AgentEntity } from "~/entities/definitions/agent.entity";
+import { LOGGER } from "~/logger";
 import { inject } from "~/shared/dependencies";
 import { RGBTuple } from "~/utils/colors";
 import { tryCatch } from "~/utils/promise";
@@ -38,7 +39,12 @@ export const PlayerAgentPlugin = definePlugin({
           value: formatAgent({
             agent: tryCatch(
               () => api.helpers.getAgent(agent!.id).displayName,
-              () => UNKNOWN_AGENT,
+              () => {
+                LOGGER.forModule("Agent-Plugin").error(
+                  `Agent not found, aid ${agent!.id}, puuid ${puuid}`,
+                );
+                return UNKNOWN_AGENT;
+              },
             ),
             isLocked: agent!.state === "locked",
             state: data._state,
