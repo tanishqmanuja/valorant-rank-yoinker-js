@@ -47,7 +47,7 @@ Give a ⭐️ if this project helped you!
 
 ## ❤️‍🔥 Infinite Thanks 
 
-Kudos to these awesome projects & the that made this possible.
+Kudos to these awesome projects that made this possible.
 
 - [valorant-rank-yoinker](https://github.com/zayKenyon/VALORANT-rank-yoinker)
 - [valorant-api-docs](https://github.com/techchrism/valorant-api-docs)
