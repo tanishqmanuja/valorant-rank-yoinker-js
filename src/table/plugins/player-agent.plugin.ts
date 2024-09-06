@@ -40,9 +40,11 @@ export const PlayerAgentPlugin = definePlugin({
             agent: tryCatch(
               () => api.helpers.getAgent(agent!.id).displayName,
               () => {
-                LOGGER.forModule("Agent-Plugin").error(
-                  `Agent not found, aid ${agent!.id}, puuid ${puuid}`,
-                );
+                if (agent && agent.id) {
+                  LOGGER.forModule("Agent-Plugin").error(
+                    `Agent not found, aid ${agent!.id}, puuid ${puuid}`,
+                  );
+                }
                 return UNKNOWN_AGENT;
               },
             ),
