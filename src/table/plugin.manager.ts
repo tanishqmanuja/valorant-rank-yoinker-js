@@ -86,7 +86,7 @@ export class PluginManager {
   }
 
   async auto() {
-    logger.info("executing Auto-Plugins");
+    logger.info("Executing Auto-Plugins");
 
     const plugins = this.active.filter(p => p.type === "auto");
 
@@ -103,7 +103,7 @@ export class PluginManager {
   }
 
   async post() {
-    logger.info("executing Post-Plugins");
+    logger.info("Executing Post-Plugins");
 
     // Set Intial Row and Column Ids
     this.table.rowIds = this.table.data.prefetched.uuids;
