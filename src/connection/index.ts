@@ -5,7 +5,7 @@ import {
   ValorantWebsocketClient,
   createValorantApiClient,
 } from "@tqman/valorant-api-client";
-import { LOCAL_CONFIG } from "@tqman/valorant-api-client/default-configs";
+import { presets } from "@tqman/valorant-api-client/presets";
 import chalk from "chalk";
 import ora, { type Ora } from "ora";
 import {
@@ -39,7 +39,7 @@ const VAL_OPEN_DEBOUNCE_MS = 1000;
 const VAL_RECONNECT_DELAY_MS = 5 * 1000;
 
 // Config for authentication via local API
-const VAPIC_OPTIONS = LOCAL_CONFIG;
+const VAPIC_OPTIONS = presets.local;
 
 const logger = LOGGER.forModule("Connection");
 
