@@ -55,7 +55,15 @@ export async function doBootstrap() {
 
   LOGGER.API.info("Authenticated");
 
-  const globalSpinner = register(GlobalSpinner, ora());
+  const globalSpinner = register(
+    GlobalSpinner,
+    ora({
+      // FIX FOR HOTKEYS
+      // read: https://github.com/sindresorhus/ora/issues/156
+      hideCursor: true,
+      discardStdin: false,
+    }),
+  );
   onExit(() => {
     if (globalSpinner.isSpinning) {
       globalSpinner.fail("Aborted...\n");
