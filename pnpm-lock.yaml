@@ -26,6 +26,9 @@ importers:
       axios:
         specifier: ^1.6.5
         version: 1.8.1
+      axios-cache-interceptor:
+        specifier: 1.0.1
+        version: 1.0.1(axios@1.8.1)
       axios-logger:
         specifier: ^2.7.1
         version: 2.8.1
@@ -725,8 +728,8 @@ packages:
     peerDependencies:
       axios: '>= 0.18 < 0.19.0 || >= 0.19.1'
 
-  axios-cache-interceptor@1.6.2:
-    resolution: {integrity: sha512-YLbAODIHZZIcD4b3WYFVQOa5W2TY/WnJ6sBHqAg6Z+hx+RVj8/OcjQyRopO6awn7/kOkGL5X9TP16AucnlJ/lw==}
+  axios-cache-interceptor@1.0.1:
+    resolution: {integrity: sha512-ClLc3CMA4SBhHL7remPuwlA7jgmUFYrYiw10Ax3g9J5lEKCGTO2lGohuzH/BR4RTFMZS7Kka05gAliLl5L/MeQ==}
     engines: {node: '>=12'}
     peerDependencies:
       axios: ^1
@@ -2640,7 +2643,7 @@ snapshots:
     dependencies:
       axios: 1.8.1
       axios-auth-refresh: 3.3.6(axios@1.8.1)
-      axios-cache-interceptor: 1.6.2(axios@1.8.1)
+      axios-cache-interceptor: 1.0.1(axios@1.8.1)
       is-retry-allowed: 3.0.0
       rxjs: 7.8.2
 
@@ -2757,7 +2760,7 @@ snapshots:
     dependencies:
       axios: 1.8.1
 
-  axios-cache-interceptor@1.6.2(axios@1.8.1):
+  axios-cache-interceptor@1.0.1(axios@1.8.1):
     dependencies:
       axios: 1.8.1
       cache-parser: 1.2.5

@@ -47,6 +47,7 @@
     "@tqman/valorant-api-types": "^0.8.1",
     "@types/dependency-solver": "^1.0.3",
     "axios": "^1.6.5",
+    "axios-cache-interceptor": "1.0.1",
     "axios-logger": "^2.7.1",
     "boxen": "^7.1.1",
     "chalk": "^5.3.0",
