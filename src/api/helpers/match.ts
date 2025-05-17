@@ -47,8 +47,9 @@ export function getMatchOverview(
   matchDetails: MatchDetails,
   puuid: string,
 ) {
-  const playerTeamId = matchDetails.players.find(p => p.subject === puuid)
-    ?.teamId;
+  const playerTeamId = matchDetails.players.find(
+    p => p.subject === puuid,
+  )?.teamId;
 
   if (!playerTeamId) {
     throw new Error("Player Team Id not found");
