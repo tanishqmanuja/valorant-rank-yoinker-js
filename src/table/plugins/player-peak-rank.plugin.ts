@@ -24,9 +24,6 @@ export const PlayerPeakRankPlugin = definePlugin({
 
         const { episode, act } = api.helpers.getActInfo(besttier.seasonId);
 
-        const getNum = (str: string) =>
-          str.split(" ")[1] ? parseInt(str.split(" ")[1]!) : undefined;
-
         const episodeNumber = getNum(episode.Name);
         const actNumber = getNum(act.Name);
 
@@ -69,4 +66,48 @@ function formatPeakRank(opts: {
   }
 
   return res;
+}
+
+/* Helpers */
+
+function getNum(str: string): number | undefined {
+  const part = str.split(" ")[1];
+  if (!part) return undefined;
+
+  const arabic = parseInt(part);
+  if (!isNaN(arabic)) return arabic;
+
+  return romanToInt(part);
+}
+
+function romanToInt(roman: string): number | undefined {
+  const romanMap: Record<string, number> = {
+    I: 1,
+    V: 5,
+    X: 10,
+    L: 50,
+    C: 100,
+    D: 500,
+    M: 1000,
+  };
+
+  let total = 0;
+  let prevValue = 0;
+
+  for (let i = roman.length - 1; i >= 0; i--) {
+    const char = roman[i]?.toUpperCase();
+    const value = romanMap[char as string];
+
+    if (value === undefined) return undefined;
+
+    if (value < prevValue) {
+      total -= value;
+    } else {
+      total += value;
+    }
+
+    prevValue = value;
+  }
+
+  return total;
 }
