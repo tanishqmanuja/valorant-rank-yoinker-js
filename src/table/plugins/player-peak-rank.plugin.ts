@@ -80,8 +80,8 @@ function parseNewEpisodeName(name: string): string | undefined {
     .split("")
     .some(
       char =>
-        char.toUpperCase().charCodeAt(0) > "A".charCodeAt(0) &&
-        char.toUpperCase().charCodeAt(0) < "Z".charCodeAt(0),
+        char.toUpperCase().charCodeAt(0) >= "A".charCodeAt(0) &&
+        char.toUpperCase().charCodeAt(0) <= "Z".charCodeAt(0),
     );
 
   if (hasNumbers && hasLetters) return name;
