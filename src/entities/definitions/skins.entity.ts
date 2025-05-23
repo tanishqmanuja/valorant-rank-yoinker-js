@@ -1,6 +1,9 @@
 import { ValorantApi } from "~/api";
 import { definePlayerEntity } from "~/entities/types/player-entity.interface";
+import { LOGGER } from "~/logger";
 import { inject } from "~/shared/dependencies";
+
+const logger = LOGGER.forModule("Entity | Skins");
 
 /** @RequestFactor 0 */
 export const SkinsEntity = definePlayerEntity({
@@ -26,11 +29,37 @@ export const SkinsEntity = definePlayerEntity({
     onInGame: ({ player, data }) => {
       const api = inject(ValorantApi);
 
-      const loadout = data.match.loadouts.Loadouts.find(
-        l => l.CharacterID === player.CharacterID,
-      )!.Loadout;
+      let loadout = data.match.loadouts.Loadouts.find(
+        l => l.Loadout.Subject === player.Subject,
+      );
 
-      return api.helpers.getLoadoutSkins(loadout);
+      if (!loadout) {
+        logger.warning(
+          "Loadout missing for",
+          player.Subject,
+          ", using fallback",
+        );
+
+        const index = data.match.data.Players.findIndex(
+          p => p.Subject === player.Subject,
+        );
+
+        if (index < 0) {
+          return;
+        }
+
+        loadout = data.match.loadouts.Loadouts.find(
+          (l, i) => l.CharacterID === player.CharacterID && i === index,
+        );
+
+        if (!loadout) {
+          return;
+        }
+
+        return api.helpers.getLoadoutSkins(loadout.Loadout);
+      }
+
+      return api.helpers.getLoadoutSkins(loadout.Loadout);
     },
   },
 });
