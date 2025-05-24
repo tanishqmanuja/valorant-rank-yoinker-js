@@ -103,7 +103,7 @@ export const PlayerNotesPlugin = definePlugin({
           playerName = agentName;
         }
 
-        if (!playerName || playerName === UNKNOWN_AGENT) {
+        if (n.length === 0 || !playerName || playerName === UNKNOWN_AGENT) {
           continue;
         }
 
