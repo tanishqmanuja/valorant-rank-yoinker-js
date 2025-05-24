@@ -47,6 +47,7 @@ export class Table {
   // Will be manipulated using 'post' plugins
   rowIds: string[] = [];
   colIds: string[] = [];
+  notes = new Map<string, string>();
 
   async display(data: GameData) {
     this.spinner.start("Generating Table...");
@@ -76,6 +77,19 @@ export class Table {
     console.log(headerStr);
     console.log(tableStr);
     process.stdout.write("\n");
+
+    if (this.notes.size) {
+      console.log("# Trivia");
+
+      for (const [key, value] of this.notes) {
+        console.log(
+          chalk.gray`*`,
+          chalk.gray.bold`${key}`,
+          chalk.gray`:`,
+          chalk.gray`${value}`,
+        );
+      }
+    }
   }
 
   private clear() {
@@ -83,6 +97,7 @@ export class Table {
     this.grid.clear();
     this.headers.clear();
     this.alignments.clear();
+    this.notes.clear();
   }
 
   private getCliTable(colIds: string[], rowIds: string[]) {
