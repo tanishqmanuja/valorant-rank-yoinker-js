@@ -6,9 +6,10 @@ import { NameEntity } from "~/entities/definitions/name.entity";
 import { NotesEntity } from "~/entities/definitions/notes.entity";
 import { RemarksEntity } from "~/entities/definitions/remarks.entity";
 import { inject } from "~/shared/dependencies";
-import { isStreamerModeEnabled } from "~/shared/environment";
+import { PartyService } from "~/shared/services/party.service";
 
 import { definePlugin } from "../types/plugin.interface";
+import { formatName } from "./player-name.plugin";
 import { interpolateColor } from "./player-winrate.plugin";
 
 const PLUGIN_ID = "player-notes";
@@ -17,6 +18,7 @@ export const PlayerNotesPlugin = definePlugin({
   hooks: {
     onState: async ({ data, table }) => {
       const api = inject(ValorantApi);
+      const partyService = inject(PartyService);
 
       const entities = await table.entityManager.getEntitiesForPlayers(data, [
         NameEntity,
@@ -27,7 +29,7 @@ export const PlayerNotesPlugin = definePlugin({
       for (const puuid in entities) {
         const { name, notes, remarks } = entities[puuid]!;
 
-        if (puuid === api.puuid || (isStreamerModeEnabled() && name.isHidden)) {
+        if (puuid === api.puuid) {
           continue;
         }
 
@@ -38,8 +40,12 @@ export const PlayerNotesPlugin = definePlugin({
             notes.allyRecord?.millis || 0,
             notes.enemyRecord?.millis || 0,
           );
+          const matchingType =
+            notes.allyRecord?.millis === lastPlayedMillis
+              ? "teamed"
+              : "rivaled";
           n.push(
-            `last matched ${chalk.bold(formatRelative(new Date(lastPlayedMillis), new Date()))}`,
+            `last ${matchingType} ${chalk.bold(formatRelative(new Date(lastPlayedMillis), new Date()))}`,
           );
         }
 
@@ -72,9 +78,14 @@ export const PlayerNotesPlugin = definePlugin({
 
         table.notes.set(
           chalk.bold(
-            isAlly
-              ? chalk.rgb(76, 151, 237)(name.value)
-              : chalk.rgb(238, 77, 77)(name.value),
+            formatName({
+              name: name.value,
+              state: data._state,
+              isHidden: name.isHidden && puuid !== api.puuid,
+              isAlly,
+              isInMyParty:
+                partyService.isInMyParty(puuid) || puuid === api.puuid,
+            }),
           ),
           chalk.gray(n.join(", ")),
         );

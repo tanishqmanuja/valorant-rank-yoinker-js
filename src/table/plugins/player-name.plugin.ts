@@ -53,7 +53,7 @@ const PARTY_COLOR: RGBTuple = [221, 224, 41];
 const ALLY_COLOR: RGBTuple = [76, 151, 237];
 const ENEMY_COLOR: RGBTuple = [238, 77, 77];
 
-function formatName(opts: {
+export function formatName(opts: {
   name: string;
   state: KnownGameStates;
   isHidden: boolean;
