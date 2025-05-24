@@ -13,7 +13,7 @@ plugins:
   player-agent: true
   player-name: true
   player-skins:
-    weapons: [Phantom]
+    weapons: [Vandal]
   
   # Styles: short, long 
   player-rank:
