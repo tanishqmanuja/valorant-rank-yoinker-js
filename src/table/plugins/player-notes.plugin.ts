@@ -33,9 +33,9 @@ export const PlayerNotesPlugin = definePlugin({
       for (const puuid in entities) {
         const { name, notes, remarks, agent } = entities[puuid]!;
 
-        // if (puuid === api.puuid) {
-        //   continue;
-        // }
+        if (puuid === api.puuid) {
+          continue;
+        }
 
         const n = [];
 
