@@ -79,17 +79,17 @@ export class Table {
     process.stdout.write("\n");
 
     if (this.notes.size) {
-      console.log("# Trivia");
-
       for (const [key, value] of this.notes) {
         console.log(
-          chalk.gray`*`,
-          chalk.gray.bold`${key}`,
-          chalk.gray`:`,
-          chalk.gray`${value}`,
+          chalk.gray.bold(" * ") +
+            chalk.gray.bold(key) +
+            chalk.gray(" ") +
+            chalk.gray(value),
         );
       }
     }
+
+    process.stdout.write("\n");
   }
 
   private clear() {

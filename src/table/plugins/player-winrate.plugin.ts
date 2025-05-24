@@ -79,7 +79,7 @@ function getInterpolatedColor(input: number): string {
   return interpolateColor(lowerColor, upperColor, interpolation);
 }
 
-function interpolateColor(
+export function interpolateColor(
   color1: string,
   color2: string,
   amount: number,

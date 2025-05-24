@@ -55,7 +55,7 @@
     "change-case": "^5.4.0",
     "cli-cursor": "^4.0.0",
     "cli-table3": "^0.6.3",
-    "date-fns": "^3.2.0",
+    "date-fns": "^4.1.0",
     "dependency-solver": "^1.0.6",
     "drizzle-kit": "^0.31.1",
     "drizzle-orm": "^0.43.1",
