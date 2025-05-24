@@ -19,3 +19,12 @@ export const enemyRecords = sqliteTable("enemy_records", {
 export const recentMatches = sqliteTable("recent_matches", {
   id: text("id").notNull().primaryKey(),
 });
+
+export const lastPlayed = sqliteTable("last_played", {
+  id: text("id").notNull().primaryKey(),
+  matchId: text("match_id").notNull(),
+  agentId: text("agent_id").notNull(),
+  queueId: text("queue_id").notNull(),
+  isAlly: integer("is_ally", { mode: "boolean" }).notNull(),
+  millis: integer("millis").notNull(),
+});
