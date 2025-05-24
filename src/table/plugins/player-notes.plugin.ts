@@ -2,13 +2,16 @@ import chalk from "chalk";
 import { formatRelative } from "date-fns";
 
 import { ValorantApi } from "~/api";
+import { AgentEntity } from "~/entities/definitions/agent.entity";
 import { NameEntity } from "~/entities/definitions/name.entity";
 import { NotesEntity } from "~/entities/definitions/notes.entity";
 import { RemarksEntity } from "~/entities/definitions/remarks.entity";
 import { inject } from "~/shared/dependencies";
 import { PartyService } from "~/shared/services/party.service";
+import { tryCatch } from "~/utils/promise";
 
 import { definePlugin } from "../types/plugin.interface";
+import { UNKNOWN_AGENT, formatAgent } from "./player-agent.plugin";
 import { formatName } from "./player-name.plugin";
 import { interpolateColor } from "./player-winrate.plugin";
 
@@ -22,16 +25,17 @@ export const PlayerNotesPlugin = definePlugin({
 
       const entities = await table.entityManager.getEntitiesForPlayers(data, [
         NameEntity,
+        AgentEntity,
         NotesEntity,
         RemarksEntity,
       ]);
 
       for (const puuid in entities) {
-        const { name, notes, remarks } = entities[puuid]!;
+        const { name, notes, remarks, agent } = entities[puuid]!;
 
-        if (puuid === api.puuid) {
-          continue;
-        }
+        // if (puuid === api.puuid) {
+        //   continue;
+        // }
 
         const n = [];
 
@@ -76,15 +80,41 @@ export const PlayerNotesPlugin = definePlugin({
 
         const isAlly = remarks?.isAlly ?? true;
 
+        let playerName = formatName({
+          name: name.value,
+          state: data._state,
+          isHidden: name.isHidden && puuid !== api.puuid,
+          isAlly,
+          isInMyParty: partyService.isInMyParty(puuid) || puuid === api.puuid,
+          hiddenString: "HIDDEN",
+        });
+
+        if (playerName === "HIDDEN") {
+          const agentName = formatAgent({
+            agent: tryCatch(
+              () => api.helpers.getAgent(agent!.id).displayName,
+              () => UNKNOWN_AGENT,
+            ),
+            isLocked: agent?.state === "locked",
+            state: data._state,
+            unknownString: UNKNOWN_AGENT,
+          });
+
+          playerName = agentName;
+        }
+
+        if (!playerName || playerName === UNKNOWN_AGENT) {
+          continue;
+        }
+
         table.notes.set(
           chalk.bold(
             formatName({
-              name: name.value,
+              name: playerName,
               state: data._state,
-              isHidden: name.isHidden && puuid !== api.puuid,
               isAlly,
-              isInMyParty:
-                partyService.isInMyParty(puuid) || puuid === api.puuid,
+              isInMyParty: partyService.isInMyParty(puuid),
+              isHidden: false,
             }),
           ),
           chalk.gray(n.join(", ")),

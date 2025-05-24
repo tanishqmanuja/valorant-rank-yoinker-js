@@ -59,11 +59,16 @@ export function formatName(opts: {
   isHidden: boolean;
   isAlly?: boolean;
   isInMyParty?: boolean;
+  hiddenString?: string;
 }) {
   let str = match(opts)
     .with({ state: GAMESTATES.MENUS }, o => chalk.rgb(...PARTY_COLOR)(o.name))
     .with({ isInMyParty: true }, o => chalk.rgb(...PARTY_COLOR)(o.name))
-    .with({ isHidden: true }, isStreamerModeEnabled, () => chalk.dim("Hidden"))
+    .with(
+      { isHidden: true },
+      isStreamerModeEnabled,
+      () => opts.hiddenString || chalk.dim("Hidden"),
+    )
     .with(
       { state: GAMESTATES.PREGAME },
       { state: GAMESTATES.INGAME, isAlly: true },

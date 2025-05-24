@@ -12,7 +12,7 @@ import { tryCatch } from "~/utils/promise";
 import { EMPTY_STRING } from "../helpers/string";
 import { definePlugin } from "../types/plugin.interface";
 
-const UNKNOWN_AGENT = "Unknown";
+export const UNKNOWN_AGENT = "Unknown";
 
 const PLUGIN_ID = "player-agent";
 const COLUMN_NAME = "Agent";
@@ -86,17 +86,21 @@ export const agentColorLUT: Record<string, RGBTuple> = {
   Deadlock: [208, 206, 194],
 };
 
-function formatAgent(opts: {
+export function formatAgent(opts: {
   agent: string;
   isLocked: boolean;
   state: KnownGameStates;
+  unknownString?: string;
 }): string {
   return match(opts)
     .with(
       { agent: UNKNOWN_AGENT, state: GAMESTATES.PREGAME },
       () => EMPTY_STRING,
     )
-    .with({ agent: UNKNOWN_AGENT }, () => chalk.dim("Unknown"))
+    .with(
+      { agent: UNKNOWN_AGENT },
+      o => o.unknownString || chalk.dim("Unknown"),
+    )
     .with({ isLocked: true }, o => colorizeAgent(o.agent))
     .otherwise(o => chalk.dim(o.agent));
 }
