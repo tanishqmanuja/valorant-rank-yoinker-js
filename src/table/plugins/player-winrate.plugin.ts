@@ -3,7 +3,6 @@ import { match } from "ts-pattern";
 
 import { WinrateEntity } from "~/entities/definitions/winrate.entity";
 import { colorInterpolate } from "~/utils/colors/interpolation";
-import { HexColor } from "~/utils/colors/types";
 
 import { definePlugin } from "../types/plugin.interface";
 
