@@ -2,6 +2,7 @@ import ora from "ora";
 
 import { ValorantApi } from "~/api";
 import { ValorantConnection, createValorantConnection } from "~/connection";
+import { initDB } from "~/db/init";
 import { EntityManager } from "~/entities/entity.manager";
 import { LOGGER } from "~/logger";
 import { register, resolve } from "~/shared/dependencies";
@@ -81,6 +82,8 @@ export async function doBootstrap() {
   /* Others */
   resolve(EntityManager);
   resolve(Table);
+
+  await initDB();
 
   enableHotkeys(() => gameDataService.requestUpdate());
 

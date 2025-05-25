@@ -8,7 +8,7 @@ import { RemarksEntity } from "~/entities/definitions/remarks.entity";
 import { inject } from "~/shared/dependencies";
 import { isStreamerModeEnabled } from "~/shared/environment";
 import { PartyService } from "~/shared/services/party.service";
-import type { RGBTuple } from "~/utils/colors";
+import type { RGBTuple } from "~/utils/colors/types";
 
 import { definePlugin } from "../types/plugin.interface";
 
@@ -53,17 +53,22 @@ const PARTY_COLOR: RGBTuple = [221, 224, 41];
 const ALLY_COLOR: RGBTuple = [76, 151, 237];
 const ENEMY_COLOR: RGBTuple = [238, 77, 77];
 
-function formatName(opts: {
+export function formatName(opts: {
   name: string;
   state: KnownGameStates;
   isHidden: boolean;
   isAlly?: boolean;
   isInMyParty?: boolean;
+  hiddenString?: string;
 }) {
   let str = match(opts)
     .with({ state: GAMESTATES.MENUS }, o => chalk.rgb(...PARTY_COLOR)(o.name))
     .with({ isInMyParty: true }, o => chalk.rgb(...PARTY_COLOR)(o.name))
-    .with({ isHidden: true }, isStreamerModeEnabled, () => chalk.dim("Hidden"))
+    .with(
+      { isHidden: true },
+      isStreamerModeEnabled,
+      () => opts.hiddenString || chalk.dim("Hidden"),
+    )
     .with(
       { state: GAMESTATES.PREGAME },
       { state: GAMESTATES.INGAME, isAlly: true },
