@@ -5,6 +5,7 @@ import { LOGGER } from "~/logger";
 
 import type { Table } from ".";
 import { PlayerAgentPlugin } from "./plugins/player-agent.plugin";
+import { PlayerDeltaRRPlugin } from "./plugins/player-delta-rr.plugin";
 import { PlayerLevelPlugin } from "./plugins/player-level.plugin";
 import { PlayerMatchesPlugin } from "./plugins/player-matches.plugin";
 import { PlayerNamePlugin } from "./plugins/player-name.plugin";
@@ -38,6 +39,7 @@ const INBUILT_PLUGINS: PluginDefinition[] = [
   PlayerSkinsPlugin,
   PlayerSorterPlugin,
   PlayerNotesPlugin,
+  PlayerDeltaRRPlugin,
   TeamSpacerPlugin,
 ];
 
