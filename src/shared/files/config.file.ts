@@ -22,11 +22,13 @@ plugins:
   player-rr: true
   player-level: true
   player-winrate: true
-
+  
   # Options same as player-rank
   player-peak-rank:
-    style: short
+  style: short
   
+  player-delta-rr: true
+
   # Count greator than 2 not recommended at all!
   player-matches:
     count: 1

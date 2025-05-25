@@ -1,3 +1,4 @@
+import { CLR_PASTEL_GREEN, CLR_PASTEL_RED } from "./constants";
 import { HexColor } from "./types";
 
 export function colorMix(
@@ -26,8 +27,6 @@ export function colorMix(
     .padStart(2, "0")}${resultB.toString(16).padStart(2, "0")}`;
 }
 
-const CLR_PASTEL_RED = "#db4a5c";
-const CLR_PASTEL_GREEN = "#c1fda9";
 export function colorInterpolate(
   ratio: number,
   colors: HexColor[] = [CLR_PASTEL_RED, CLR_PASTEL_GREEN],
