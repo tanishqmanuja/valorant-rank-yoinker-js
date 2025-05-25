@@ -18,14 +18,10 @@ export const PlayerDeltaRRPlugin = definePlugin({
       for (const puuid in entities) {
         const { "last-match": lastMatch } = entities[puuid]!;
 
-        if (!lastMatch) {
-          continue;
-        }
-
         table.grid.setCell({
           rowId: puuid,
           colId: PLUGIN_ID,
-          value: formatDeltaRR(lastMatch.earnedRR),
+          value: formatDeltaRR(lastMatch?.earnedRR ?? NaN),
         });
       }
 
