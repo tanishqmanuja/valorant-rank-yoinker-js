@@ -76,10 +76,14 @@ export class PluginManager {
 
       if (typeof entry === "boolean" && entry) {
         this.activate(key);
-      } else if ("enabled" in entry && entry.enabled !== false) {
-        this.activate(key);
-      } else if (Object.keys(entry).length > 0) {
-        this.activate(key);
+      }
+
+      if (typeof entry === "object") {
+        if ("enabled" in entry && entry.enabled !== false) {
+          this.activate(key);
+        } else if (Object.keys(entry).length > 0) {
+          this.activate(key);
+        }
       }
     }
   }
