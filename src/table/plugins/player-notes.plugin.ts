@@ -7,6 +7,7 @@ import { NameEntity } from "~/entities/definitions/name.entity";
 import { NotesEntity } from "~/entities/definitions/notes.entity";
 import { RemarksEntity } from "~/entities/definitions/remarks.entity";
 import { inject } from "~/shared/dependencies";
+import { getQueueName } from "~/shared/luts/queue.lut";
 import { PartyService } from "~/shared/services/party.service";
 import { tryCatch } from "~/utils/promise";
 
@@ -101,6 +102,18 @@ export const PlayerNotesPlugin = definePlugin({
           });
 
           playerName = agentName;
+        }
+
+        if (n.length === 0 && notes.lastPlayed) {
+          const queue = getQueueName(notes.lastPlayed.queueId);
+          const agent = api.helpers.getAgent(
+            notes.lastPlayed.agentId,
+          ).displayName;
+          const allyOrEnemy = notes.lastPlayed.isAlly ? "ally" : "enemy";
+
+          n.push(
+            `last played ${queue} ${chalk.bold(formatRelative(new Date(notes.lastPlayed.millis), new Date()))} was ${allyOrEnemy} ${chalk.bold(agent)}`,
+          );
         }
 
         if (n.length === 0 || !playerName || playerName === UNKNOWN_AGENT) {
