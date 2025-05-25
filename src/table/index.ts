@@ -18,6 +18,7 @@ import {
 } from "~/shared/services/helpers/game-data";
 import { PresenceService } from "~/shared/services/presence.service";
 import { GlobalSpinner } from "~/shared/spinner";
+import { ensureArray } from "~/utils/array";
 import { GridStore } from "~/utils/grid-store";
 
 import { colorizeGameState } from "./formatters/state.formatter";
@@ -42,12 +43,12 @@ export class Table {
   grid = new GridStore<string>();
   headers = new Map<string, string>();
   alignments = new Map<string, "left" | "center" | "right">();
+  notes = new Map<string, string | string[]>();
 
   // These are the final rowIds and colIds that will be printed
   // Will be manipulated using 'post' plugins
   rowIds: string[] = [];
   colIds: string[] = [];
-  notes = new Map<string, string>();
 
   async display(data: GameData) {
     this.spinner.start("Generating Table...");
@@ -79,13 +80,20 @@ export class Table {
     process.stdout.write("\n");
 
     if (this.notes.size) {
-      for (const [key, value] of this.notes) {
-        console.log(
-          chalk.gray.bold(" * ") +
-            chalk.gray.bold(key) +
-            chalk.gray(" ") +
-            chalk.gray(value),
-        );
+      for (const [noteTitle, note] of this.notes) {
+        const titleStr = chalk.gray.bold(" * ") + noteTitle;
+        const titleWidth = stringWidth(titleStr);
+
+        const subnotes = ensureArray(note).filter(Boolean);
+
+        if (!subnotes.length) {
+          continue;
+        }
+
+        console.log(titleStr + " " + subnotes[0]);
+        for (let i = 1; i < subnotes.length; i++) {
+          console.log(" ".repeat(titleWidth + 1) + subnotes[i]);
+        }
       }
     }
 

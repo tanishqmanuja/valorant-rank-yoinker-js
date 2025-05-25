@@ -8,7 +8,7 @@ import { RemarksEntity } from "~/entities/definitions/remarks.entity";
 import { inject } from "~/shared/dependencies";
 import { isStreamerModeEnabled } from "~/shared/environment";
 import { PartyService } from "~/shared/services/party.service";
-import type { RGBTuple } from "~/utils/colors";
+import type { RGBTuple } from "~/utils/colors/types";
 
 import { definePlugin } from "../types/plugin.interface";
 

@@ -4,7 +4,7 @@ import { capitalCase } from "change-case";
 import { ValorantApi } from "~/api";
 import { TierEntity } from "~/entities/definitions/tier.entity";
 import { inject } from "~/shared/dependencies";
-import { RGBTuple } from "~/utils/colors";
+import type { RGBTuple } from "~/utils/colors/types";
 import { LooseAutocomplete } from "~/utils/string";
 
 import { definePlugin } from "../types/plugin.interface";

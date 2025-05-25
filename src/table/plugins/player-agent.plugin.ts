@@ -6,7 +6,7 @@ import { GAMESTATES, KnownGameStates } from "~/api/types";
 import { AgentEntity } from "~/entities/definitions/agent.entity";
 import { LOGGER } from "~/logger";
 import { inject } from "~/shared/dependencies";
-import { RGBTuple } from "~/utils/colors";
+import type { RGBTuple } from "~/utils/colors/types";
 import { tryCatch } from "~/utils/promise";
 
 import { EMPTY_STRING } from "../helpers/string";

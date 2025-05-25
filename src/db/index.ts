@@ -2,6 +2,8 @@ import { drizzle } from "drizzle-orm/libsql";
 
 import * as schema from "./schema";
 
-export const db = drizzle("file:./vryjs.db", {
+const DATABASE = "vryjs.db";
+
+export const db = drizzle(`file:./${DATABASE}`, {
   schema,
 });

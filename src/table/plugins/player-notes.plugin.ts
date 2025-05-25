@@ -2,6 +2,7 @@ import chalk from "chalk";
 import { formatRelative } from "date-fns";
 
 import { ValorantApi } from "~/api";
+import { GAMESTATES } from "~/api/types";
 import { AgentEntity } from "~/entities/definitions/agent.entity";
 import { NameEntity } from "~/entities/definitions/name.entity";
 import { NotesEntity } from "~/entities/definitions/notes.entity";
@@ -9,12 +10,12 @@ import { RemarksEntity } from "~/entities/definitions/remarks.entity";
 import { inject } from "~/shared/dependencies";
 import { getQueueName } from "~/shared/luts/queue.lut";
 import { PartyService } from "~/shared/services/party.service";
+import { colorInterpolate } from "~/utils/colors/interpolation";
 import { tryCatch } from "~/utils/promise";
 
 import { definePlugin } from "../types/plugin.interface";
 import { UNKNOWN_AGENT, formatAgent } from "./player-agent.plugin";
 import { formatName } from "./player-name.plugin";
-import { interpolateColor } from "./player-winrate.plugin";
 
 const PLUGIN_ID = "player-notes";
 export const PlayerNotesPlugin = definePlugin({
@@ -38,7 +39,29 @@ export const PlayerNotesPlugin = definePlugin({
           continue;
         }
 
-        const n = [];
+        const lastPlayedNote = [];
+        const compNote = [];
+
+        if (
+          data._state !== GAMESTATES.MENUS &&
+          notes.lastPlayed &&
+          notes.lastPlayed.matchId !== data.match.id
+        ) {
+          const queue = getQueueName(notes.lastPlayed.queueId);
+          const agent = api.helpers.getAgent(
+            notes.lastPlayed.agentId,
+          ).displayName;
+
+          const ALLYLESS_QUEUES = ["deathmatch"];
+          const allyOrEnemy = notes.lastPlayed.isAlly ? "ally" : "enemy";
+          const allyOrEnemyStr = ALLYLESS_QUEUES.includes(queue)
+            ? ""
+            : allyOrEnemy + " ";
+
+          lastPlayedNote.push(
+            `${allyOrEnemyStr}${chalk.bold(agent)} in ${queue} - ${chalk.bold(formatRelative(new Date(notes.lastPlayed.millis), new Date()))} (${notes.lastPlayed.times}x)`,
+          );
+        }
 
         if (notes.allyRecord || notes.enemyRecord) {
           const lastPlayedMillis = Math.max(
@@ -49,11 +72,10 @@ export const PlayerNotesPlugin = definePlugin({
             notes.allyRecord?.millis === lastPlayedMillis
               ? "teamed"
               : "rivaled";
-          n.push(
+          compNote.push(
             `last ${matchingType} ${chalk.bold(formatRelative(new Date(lastPlayedMillis), new Date()))}`,
           );
         }
-
         if (notes.allyRecord) {
           const allyWinRatio = getRatio(
             notes.allyRecord.wins,
@@ -62,7 +84,7 @@ export const PlayerNotesPlugin = definePlugin({
               notes.allyRecord.draws,
           );
 
-          n.push(
+          compNote.push(
             `as Ally ${chalk.hex(getInterpolatedColor(allyWinRatio))((allyWinRatio * 100).toFixed(0) + "%")} WR [ ${notes.allyRecord.wins}W-${notes.allyRecord.losses}L-${notes.allyRecord.draws}D ]`,
           );
         }
@@ -74,7 +96,7 @@ export const PlayerNotesPlugin = definePlugin({
               notes.enemyRecord.draws,
           );
 
-          n.push(
+          compNote.push(
             `as Enemy ${chalk.hex(getInterpolatedColor(enemyWinRatio))((enemyWinRatio * 100).toFixed(0) + "%")} WR [ ${notes.enemyRecord.wins}W-${notes.enemyRecord.losses}L-${notes.enemyRecord.draws}D ]`,
           );
         }
@@ -104,19 +126,11 @@ export const PlayerNotesPlugin = definePlugin({
           playerName = agentName;
         }
 
-        if (n.length === 0 && notes.lastPlayed) {
-          const queue = getQueueName(notes.lastPlayed.queueId);
-          const agent = api.helpers.getAgent(
-            notes.lastPlayed.agentId,
-          ).displayName;
-          const allyOrEnemy = notes.lastPlayed.isAlly ? "ally" : "enemy";
-
-          n.push(
-            `last played ${queue} ${chalk.bold(formatRelative(new Date(notes.lastPlayed.millis), new Date()))} was ${allyOrEnemy} ${chalk.bold(agent)}`,
-          );
-        }
-
-        if (n.length === 0 || !playerName || playerName === UNKNOWN_AGENT) {
+        if (
+          (lastPlayedNote.length === 0 && compNote.length === 0) ||
+          !playerName ||
+          playerName === UNKNOWN_AGENT
+        ) {
           continue;
         }
 
@@ -130,7 +144,10 @@ export const PlayerNotesPlugin = definePlugin({
               isHidden: false,
             }),
           ),
-          chalk.gray(n.join(", ")),
+          [
+            chalk.gray(lastPlayedNote.join(", ")),
+            chalk.gray(compNote.join(", ")),
+          ],
         );
       }
     },
@@ -147,15 +164,6 @@ function getRatio(num: number, denom: number): number {
 }
 
 function getInterpolatedColor(input: number): string {
-  if (input < 0 || input > 1) {
-    throw new Error("Input should be between 0 and 1");
-  }
-  // Define color range
-  const colorRange = ["#db4a5c", "#fcffb5", "#c1fda9"];
-  // Interpolate color
-  const color = input * (colorRange.length - 1);
-  const lowerColor = colorRange[Math.floor(color)]!;
-  const upperColor = colorRange[Math.ceil(color)]!;
-  const interpolation = color - Math.floor(color);
-  return interpolateColor(lowerColor, upperColor, interpolation);
+  const colors = ["#db4a5c", "#fcffb5", "#c1fda9"];
+  return colorInterpolate(input, colors);
 }

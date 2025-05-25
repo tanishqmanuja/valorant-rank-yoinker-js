@@ -27,4 +27,5 @@ export const lastPlayed = sqliteTable("last_played", {
   queueId: text("queue_id").notNull(),
   isAlly: integer("is_ally", { mode: "boolean" }).notNull(),
   millis: integer("millis").notNull(),
+  times: integer("times").notNull().default(1),
 });
