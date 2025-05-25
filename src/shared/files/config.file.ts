@@ -32,6 +32,8 @@ plugins:
   # Count greator than 2 not recommended at all!
   player-matches:
     count: 1
+
+  player-notes: false
   
   # Sorters: level, rr, tier
   # First in the list gets the highest priority
