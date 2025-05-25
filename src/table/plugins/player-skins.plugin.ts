@@ -5,7 +5,7 @@ import { GAMESTATES, Weapon } from "~/api/types";
 import { SkinsEntity } from "~/entities/definitions/skins.entity";
 import { inject } from "~/shared/dependencies";
 import { ensureArray } from "~/utils/array";
-import { RGBTuple } from "~/utils/colors";
+import type { RGBTuple } from "~/utils/colors/types";
 
 import { definePlugin } from "../types/plugin.interface";
 
