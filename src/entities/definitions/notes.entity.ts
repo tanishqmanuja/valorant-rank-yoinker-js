@@ -24,8 +24,8 @@ export const NotesEntity = definePlayerEntity({
         await saveRecords();
 
         const currentMatchId = match(data)
-          .with({ _state: GAMESTATES.INGAME }, d => d.match.data.MatchID)
-          .with({ _state: GAMESTATES.PREGAME }, d => d.match.data.ID)
+          .with({ _state: GAMESTATES.INGAME }, d => d.match.id)
+          .with({ _state: GAMESTATES.PREGAME }, d => d.match.id)
           .with({ _state: GAMESTATES.MENUS }, () => "")
           .exhaustive();
 
