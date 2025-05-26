@@ -72,8 +72,8 @@ export class ValorantConnection {
       this.#ws.on("open", () => {
         logger.info(`WS Connected on port ${port}`);
       });
-      this.#ws.on("close", async () => {
-        logger.info("WS Disconnected");
+      this.#ws.on("close", async e => {
+        logger.info("WS Disconnected", e);
         if (spinner) {
           spinner.warn("Connection lost!\n");
         }
