@@ -61,7 +61,7 @@ export const PlayerNotesPlugin = definePlugin({
             : allyOrEnemy + " ";
 
           lastPlayedNote.push(
-            `${allyOrEnemyStr}${chalk.bold(agent)} in ${queue} - ${chalk.bold(formatRelative(new Date(notes.lastPlayed.millis), new Date()))} (${notes.lastPlayed.times}x)`,
+            `was ${allyOrEnemyStr}${chalk.bold(agent)} in ${queue} - ${chalk.bold(formatRelative(new Date(notes.lastPlayed.millis), new Date()))} (${notes.lastPlayed.times}x)`,
           );
         }
 
