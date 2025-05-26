@@ -3,7 +3,7 @@ import { readFile } from "fs/promises";
 import { join } from "path";
 
 import { LOGGER } from "~/logger";
-import { isProcessRunning } from "~/utils/process";
+import { isValorantRunning } from "~/utils/valorant";
 
 const FALLBACK_RIOT_CLIENT_PATH =
   "C:/Riot Games/Riot Client/RiotClientServices.exe";
@@ -29,9 +29,9 @@ export async function launchValorant(riotClientPath: string) {
 }
 
 export async function autoStartValorant() {
-  const isValorantRunning = await isProcessRunning("valorant.exe");
+  const isValRunning = await isValorantRunning();
 
-  if (isValorantRunning) {
+  if (isValRunning) {
     logger.info("Valorant is already running");
     return;
   }

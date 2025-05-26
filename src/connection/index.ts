@@ -25,8 +25,8 @@ import { isNativeError } from "util/types";
 import { ValorantApi, createValorantApi } from "~/api";
 import { LOGGER } from "~/logger";
 import { isFileAccessible } from "~/utils/filesystem";
-import { isProcessRunning } from "~/utils/process";
 import { sleep } from "~/utils/promise";
+import { isValorantRunning } from "~/utils/valorant";
 
 import { modifyApiBehaviour } from "./helpers";
 
@@ -111,7 +111,7 @@ export class ValorantConnection {
 
     const isValorantRunning$ = timer(0, CHECK_INTERVAL_MS).pipe(
       switchMap(async () => {
-        const processFlag = await isProcessRunning("valorant.exe");
+        const processFlag = await isValorantRunning();
         const filesFlag = await isFileAccessible(LOCK_FILE_PATH, LOG_FILE_PATH);
         return filesFlag && processFlag;
       }),
