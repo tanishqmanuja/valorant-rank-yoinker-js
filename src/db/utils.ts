@@ -1,26 +1,59 @@
-import { InferInsertModel, sql } from "drizzle-orm";
+import { InferInsertModel, ne, sql } from "drizzle-orm";
 import { SQLiteTable } from "drizzle-orm/sqlite-core";
 
-import { db } from ".";
-import { lastPlayed } from "./schema";
+import { conflictUpdateAllExcept } from "~/utils/drizzle";
 
-export function updateLastPlayed(
+import { db } from ".";
+import { lastPlayed, lastPlayedStaging } from "./schema";
+
+export function stageLastPlayed(
   id: string,
-  value: Omit<InferInsertModel<typeof lastPlayed>, "id">,
+  value: Omit<InferInsertModel<typeof lastPlayedStaging>, "id">,
 ) {
   return db
-    .insert(lastPlayed)
+    .insert(lastPlayedStaging)
     .values({
       id,
       ...value,
     })
     .onConflictDoUpdate({
-      set: {
-        ...value,
-        times: sql`times + 1`,
-      },
-      target: [lastPlayed.id],
+      set: value,
+      target: [lastPlayedStaging.id],
     });
+}
+
+export function syncLastPlayed(currentGameMatchId: string) {
+  return db.transaction(async tx => {
+    const rows = await tx
+      .select()
+      .from(lastPlayedStaging)
+      .where(ne(lastPlayedStaging.matchId, currentGameMatchId));
+
+    if (rows.length === 0) return;
+
+    const setClause = {
+      ...conflictUpdateAllExcept(lastPlayed, ["id", "times"]),
+      times: sql`${lastPlayed.times} + 1`,
+    };
+
+    await tx
+      .insert(lastPlayed)
+      .values(
+        rows.map(row => ({
+          ...row,
+          times: 1,
+        })),
+      )
+      .onConflictDoUpdate({
+        target: lastPlayed.id,
+        set: setClause,
+        where: sql`${lastPlayed.matchId} != excluded.match_id`,
+      });
+
+    await tx
+      .delete(lastPlayedStaging)
+      .where(ne(lastPlayedStaging.matchId, currentGameMatchId));
+  });
 }
 
 export async function limitRows(table: SQLiteTable, limit: number) {

@@ -29,3 +29,12 @@ export const lastPlayed = sqliteTable("last_played", {
   millis: integer("millis").notNull(),
   times: integer("times").notNull().default(1),
 });
+
+export const lastPlayedStaging = sqliteTable("last_played_staging", {
+  id: text("id").notNull().primaryKey(),
+  matchId: text("match_id").notNull(),
+  agentId: text("agent_id").notNull(),
+  queueId: text("queue_id").notNull(),
+  isAlly: integer("is_ally", { mode: "boolean" }).notNull(),
+  millis: integer("millis").notNull(),
+});

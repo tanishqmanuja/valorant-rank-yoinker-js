@@ -1,10 +1,11 @@
 import { inArray, sql } from "drizzle-orm";
+import { match } from "ts-pattern";
 
 import { ValorantApi } from "~/api";
 import { GAMESTATES } from "~/api/types";
 import { db } from "~/db";
 import { allyRecords, enemyRecords, recentMatches } from "~/db/schema";
-import { limitRows, updateLastPlayed } from "~/db/utils";
+import { limitRows, stageLastPlayed, syncLastPlayed } from "~/db/utils";
 import { definePlayerEntity } from "~/entities/types/player-entity.interface";
 import { inject } from "~/shared/dependencies";
 import { InGamePlayerData } from "~/shared/services/helpers/player-data";
@@ -19,7 +20,16 @@ export const NotesEntity = definePlayerEntity({
       const presenceService = inject(PresenceService);
 
       if (player.Subject === api.puuid) {
+        // ensure all below code runs only once
         await saveRecords();
+
+        const currentMatchId = match(data)
+          .with({ _state: GAMESTATES.INGAME }, d => d.match.data.MatchID)
+          .with({ _state: GAMESTATES.PREGAME }, d => d.match.data.ID)
+          .with({ _state: GAMESTATES.MENUS }, () => "")
+          .exhaustive();
+
+        await syncLastPlayed(currentMatchId);
       }
 
       if (data._state === GAMESTATES.INGAME) {
@@ -39,7 +49,7 @@ export const NotesEntity = definePlayerEntity({
         const isAlly = selfTeamID === (player as InGamePlayerData).TeamID;
 
         if (agentId && queueId) {
-          await updateLastPlayed(player.Subject, {
+          await stageLastPlayed(player.Subject, {
             matchId: data.match.data.MatchID,
             agentId,
             queueId,

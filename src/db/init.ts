@@ -1,3 +1,5 @@
+import { sql } from "drizzle-orm";
+
 import { db } from ".";
 import { statements } from "./migrations";
 
@@ -12,5 +14,7 @@ export async function initDB() {
     for (const migration of statements) {
       await db.run(migration);
     }
+  } else {
+    await db.run(sql.raw(`PRAGMA journal_mode = WAL;`));
   }
 }

@@ -54,7 +54,9 @@ export const PlayerNotesPlugin = definePlugin({
 
           const ALLYLESS_QUEUES = ["deathmatch"];
           const allyOrEnemy = notes.lastPlayed.isAlly ? "ally" : "enemy";
-          const allyOrEnemyStr = ALLYLESS_QUEUES.includes(queue)
+          const allyOrEnemyStr = ALLYLESS_QUEUES.includes(
+            notes.lastPlayed.queueId,
+          )
             ? ""
             : allyOrEnemy + " ";
 
