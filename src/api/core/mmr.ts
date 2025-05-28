@@ -1,3 +1,6 @@
+import { AxiosCacheRequestConfig } from "@tqman/axios-interceptor-suite";
+import { CompetitiveUpdatesRequestConfig } from "@tqman/valorant-api-client/types";
+
 import type { ValorantApi } from "..";
 import type { PlayerCompetitiveUpdates, PlayerMMR } from "../types";
 
@@ -34,7 +37,11 @@ export async function getCompetitiveUpdates(
     data: {
       puuid,
     },
-  });
+    cache: {
+      interpretHeaders: false,
+      ttl: 4 * 60 * 1000, // since competitive updates changes frequently, dont over cache it.
+    },
+  } as CompetitiveUpdatesRequestConfig & AxiosCacheRequestConfig);
 
   return compUpdates;
 }
