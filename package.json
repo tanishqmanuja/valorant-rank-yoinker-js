@@ -1,6 +1,6 @@
 {
   "name": "vryjs",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "VALORANT Rank Yoinker JS",
   "repository": "tanishqmanuja/valorant-rank-yoinker-js",
   "type": "module",
