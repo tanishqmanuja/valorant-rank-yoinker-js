@@ -14,6 +14,8 @@ plugins:
   player-name: true
   player-skins:
     weapons: [Vandal]
+    replacements:
+      "Radiant Entertainment System": "Radiant E.S."
   
   # Styles: short, long 
   player-rank:

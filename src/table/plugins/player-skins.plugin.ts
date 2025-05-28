@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { z } from "zod";
 
 import { ValorantApi } from "~/api";
 import { GAMESTATES, Weapon } from "~/api/types";
@@ -6,6 +7,7 @@ import { SkinsEntity } from "~/entities/definitions/skins.entity";
 import { inject } from "~/shared/dependencies";
 import { ensureArray } from "~/utils/array";
 import type { RGBTuple } from "~/utils/colors/types";
+import { tryCatch } from "~/utils/promise";
 
 import { definePlugin } from "../types/plugin.interface";
 
@@ -25,6 +27,15 @@ export const PlayerSkinsPlugin = definePlugin({
         ensureArray(config.weapons),
       ).filter(Boolean) as Weapon[];
 
+      const replacements = tryCatch(
+        () =>
+          z
+            .record(z.string(), z.string())
+            .default({})
+            .parse(config.replacements),
+        () => ({}),
+      );
+
       const entities = await table.entityManager.getEntitiesForPlayers(data, [
         SkinsEntity,
       ]);
@@ -41,7 +52,11 @@ export const PlayerSkinsPlugin = definePlugin({
           table.grid.setCell({
             rowId: puuid,
             colId,
-            value: formatSkin({ skins, selected: weapon.displayName }),
+            value: formatSkin({
+              skins,
+              selected: weapon.displayName,
+              replacements,
+            }),
           });
         }
 
@@ -66,6 +81,7 @@ function parseWeapons(api: ValorantApi, names: string[]) {
 function formatSkin(opts: {
   skins: Record<string, Weapon["skins"][number]>;
   selected: string;
+  replacements: Record<string, string>;
 }) {
   const skin = opts.skins[opts.selected.toLowerCase()]!;
   const regex = new RegExp(opts.selected, "ig");
@@ -78,6 +94,14 @@ function formatSkin(opts: {
 
   if (name.toLowerCase() === "standard") {
     return chalk.gray(name);
+  }
+
+  const replacement = Object.entries(opts.replacements).find(
+    ([k]) => k.toLowerCase() === name.toLowerCase(),
+  );
+
+  if (replacement) {
+    return chalk.rgb(...colorRGB)(replacement[1]);
   }
 
   return chalk.rgb(...colorRGB)(name);
