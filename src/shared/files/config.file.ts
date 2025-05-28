@@ -33,7 +33,7 @@ plugins:
   player-matches:
     count: 1
 
-  player-notes: false
+  player-notes: true
   
   # Sorters: level, rr, tier
   # First in the list gets the highest priority
