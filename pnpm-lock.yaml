@@ -11,6 +11,9 @@ importers:
       '@libsql/client':
         specifier: ^0.15.7
         version: 0.15.7
+      '@libsql/win32-x64-msvc':
+        specifier: ^0.5.11
+        version: 0.5.11
       '@tqman/axios-interceptor-suite':
         specifier: ^0.3.4
         version: 0.3.4(axios@1.8.1)
@@ -3270,8 +3273,7 @@ snapshots:
   '@libsql/linux-x64-musl@0.5.11':
     optional: true
 
-  '@libsql/win32-x64-msvc@0.5.11':
-    optional: true
+  '@libsql/win32-x64-msvc@0.5.11': {}
 
   '@neon-rs/load@0.0.4': {}
 
