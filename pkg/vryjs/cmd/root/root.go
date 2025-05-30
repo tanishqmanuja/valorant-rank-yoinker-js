@@ -34,6 +34,10 @@ func RootCommand() *cobra.Command {
 				os.Exit(1)
 			}
 
+			if err := internal.EnsureLibSQLBinaryExists(); err != nil {
+				os.Exit(1)
+			}
+
 			if bundleVersion, err := internal.GetVryJSBundleVersion(); err != nil {
 				fmt.Println("==> Unable to read bundle version, bundle may be corrupt.")
 				os.Exit(1)

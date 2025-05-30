@@ -1,6 +1,7 @@
 import { BuildOptions, build } from "esbuild";
 import { execa } from "execa";
 import { copyFile } from "fs/promises";
+import { createRequire } from "module";
 import pkg from "package.json";
 
 const VERSION = pkg.version ?? "0.0.0";
@@ -25,6 +26,21 @@ const __filename = (await import("node:url")).fileURLToPath(import.meta.url);
 const __dirname = (await import("node:path")).dirname(__filename);
 `;
 
+const LIBSQL_FIX_BANNER = `
+// LibSQL Fixes
+import {Module} from "node:module"
+import path from 'path';
+
+const originalLoad = Module._load
+Module._load = function (request, parent, isMain) {
+  if (request === '@libsql/win32-x64-msvc') {
+    // Return the real .node file
+    return require(path.join(__dirname, 'libsql.node'));
+  }
+  return originalLoad.apply(this, arguments);
+};
+`;
+
 async function bundle() {
   const config = {
     entryPoints: ["./src/index.ts"],
@@ -39,11 +55,18 @@ async function bundle() {
       "process.env.VRYJS_VERSION": `"${VERSION}"`,
     },
     banner: {
-      js: ESM_FIX_BANNER,
+      js: [ESM_FIX_BANNER, LIBSQL_FIX_BANNER]
+        .map(x => x.trim())
+        .join("\n\n")
+        .concat("\n"),
     },
   } satisfies BuildOptions;
 
   await build(config);
+
+  const require = createRequire(import.meta.url);
+  const modulePath = require.resolve("@libsql/win32-x64-msvc");
+  await copyFile(modulePath, "./out/libsql.node");
 }
 
 async function resource() {
