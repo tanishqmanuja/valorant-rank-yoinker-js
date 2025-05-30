@@ -9,7 +9,8 @@
     "releaseName": "vRYjs v${version}",
     "tokenRef": "GITHUB_TOKEN",
     "assets": [
-      "out/*"
+      "out/vryjs.exe",
+      "out/vryjs.mjs"
     ]
   },
   "hooks": {
