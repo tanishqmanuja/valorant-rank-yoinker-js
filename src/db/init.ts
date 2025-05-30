@@ -15,6 +15,7 @@ export async function initDB() {
       await db.run(migration);
     }
   } else {
+    await db.run(sql.raw(`PRAGMA synchronous = NORMAL`));
     await db.run(sql.raw(`PRAGMA journal_mode = WAL;`));
   }
 }
