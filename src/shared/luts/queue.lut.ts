@@ -18,6 +18,7 @@ export const QUEUE_NAME_LUT = {
 } as const;
 
 export type QueueId = keyof typeof QUEUE_NAME_LUT;
+export type QueueName = (typeof QUEUE_NAME_LUT)[QueueId];
 
 export function getQueueName(queue: LooseAutocomplete<QueueId>) {
   return QUEUE_NAME_LUT[queue as QueueId] ?? capitalCase(queue as string);

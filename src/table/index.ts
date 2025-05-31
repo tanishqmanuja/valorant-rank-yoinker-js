@@ -8,7 +8,7 @@ import { ValorantApi } from "~/api";
 import { EntityManager } from "~/entities/entity.manager";
 import { LOGGER } from "~/logger";
 import { inject } from "~/shared/dependencies";
-import { getQueueName } from "~/shared/luts/queue.lut";
+import { QueueName, getQueueName } from "~/shared/luts/queue.lut";
 import { ConfigService } from "~/shared/services/config.service";
 import {
   type GameData,
@@ -226,7 +226,13 @@ export class Table {
     t.map && (tStr += " " + t.map);
     t.queue && (tStr += " " + `(${t.queue})`);
     t.server && (tStr += " " + `[${t.server}]`);
-    t.team && (tStr += " " + t.team);
+
+    const TEAM_QUEUE_EXCLUSIONS: QueueName[] = ["Deathmatch"];
+    const TEAM_MAP_EXCLUSIONS = ["The Range"];
+    t.team &&
+      !TEAM_QUEUE_EXCLUSIONS.includes(t.queue as QueueName) &&
+      !TEAM_MAP_EXCLUSIONS.includes(t.map!) &&
+      (tStr += " " + t.team);
 
     if (tStr.length > 0) {
       tStr = t.state + " - " + tStr.trim();
