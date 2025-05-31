@@ -1,3 +1,6 @@
+import type { AxiosCacheRequestConfig } from "@tqman/axios-interceptor-suite";
+import type { CurrentGameMatchRequestConfig } from "@tqman/valorant-api-client/types";
+
 import type { ValorantApi } from "..";
 import type { CurrentGameLoadouts, CurrentGameMatchData } from "../types";
 
@@ -8,7 +11,8 @@ export async function getCurrentGameMatchId(
     data: {
       puuid: this.puuid,
     },
-  });
+    cache: false,
+  } as CurrentGameMatchRequestConfig & AxiosCacheRequestConfig);
 
   return data.MatchID;
 }
