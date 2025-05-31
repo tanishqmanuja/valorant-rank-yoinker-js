@@ -28,7 +28,7 @@ const lineFormat = format.printf(
 export const rawLogger = createLogger({
   format: format.combine(
     format.uncolorize(),
-    format.printf(({ message }) => message),
+    format.printf(({ message }) => String(message)),
   ),
   transports: [fileTransportForCli],
 });

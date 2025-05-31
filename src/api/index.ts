@@ -9,13 +9,20 @@ import * as helpers from "./helpers";
 import { type PrefetchedContent, prefetchContent } from "./store/content.store";
 import { MatchStore } from "./store/match.store";
 
+type FixModuleThis<T extends Record<string, (...args: any) => any>> = {
+  [k in keyof T]: (...args: Parameters<T[k]>) => ReturnType<T[k]>;
+};
+
 export class ValorantApi {
+  core: FixModuleThis<typeof core>;
+  helpers: FixModuleThis<typeof helpers>;
+
   #matchStore = new MatchStore();
   #prefetchedContent: PrefetchedContent | undefined;
 
   constructor(private vapic: ValorantApiClient) {
-    this.extend("core", core);
-    this.extend("helpers", helpers);
+    this.core = this.bindModule(core);
+    this.helpers = this.bindModule(helpers);
   }
 
   async init() {
@@ -46,12 +53,14 @@ export class ValorantApi {
     return this.#matchStore;
   }
 
-  private extend<T extends keyof Extensions>(name: T, mod: Extensions[T]) {
-    // @ts-ignore
-    this[name] = {};
+  private bindModule<T extends Record<string, (...args: any) => any>>(
+    mod: T,
+  ): FixModuleThis<T> {
+    const bound: any = {};
     for (const [k, fn] of Object.entries(mod)) {
-      this[name][k as keyof ValorantApi[T]] = fn.bind(this);
+      bound[k] = fn.bind(this);
     }
+    return bound;
   }
 }
 
@@ -60,13 +69,3 @@ export async function createValorantApi(vapic: ValorantApiClient) {
   await api.init();
   return api;
 }
-
-/* Monkeypatch Class Interface */
-type FixModuleThis<T extends Record<string, (...args: any) => any>> = {
-  [k in keyof T]: (...args: Parameters<T[k]>) => ReturnType<T[k]>;
-};
-type Extensions = {
-  core: FixModuleThis<typeof core>;
-  helpers: FixModuleThis<typeof helpers>;
-};
-export interface ValorantApi extends Extensions {}

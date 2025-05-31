@@ -9,7 +9,7 @@ export class InMemoryLRUCache<V = unknown, K extends string = string>
 
   set(key: K, value: V): void {
     if (this.cache.size >= this.capacity && !this.cache.has(key)) {
-      this.cache.delete(this.cache.keys().next().value);
+      this.cache.delete(this.cache.keys().next().value!);
     }
 
     this.cache.set(key, value);

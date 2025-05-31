@@ -70,8 +70,8 @@ export class FileSystemLRUCache<V = unknown> implements LRUCache<V> {
   set(key: string, value: V): void {
     if (this.register.size >= this.capacity && !this.register.has(key)) {
       const key = this.register.keys().next().value;
-      this.register.delete(key);
-      tryCatch(() => rmSync(join(this.dirpath, this.opts.keyToFile(key))));
+      this.register.delete(key!);
+      tryCatch(() => rmSync(join(this.dirpath, this.opts.keyToFile(key!))));
     }
 
     const filepath = join(this.dirpath, this.opts.keyToFile(key));
