@@ -8,6 +8,7 @@ import { TAGS } from "./helpers/tags";
 import { LOGGER } from "./logger";
 import { inject } from "./shared/dependencies";
 import { env, isDevelopment } from "./shared/environment";
+import { ConfigService } from "./shared/services/config.service";
 import { GameDataService } from "./shared/services/game-data.service";
 import { GlobalSpinner } from "./shared/spinner";
 import { Table } from "./table";
@@ -38,6 +39,9 @@ const spinner = inject(GlobalSpinner);
 const gameDataService = inject(GameDataService);
 const table = inject(Table);
 
+const configService = inject(ConfigService);
+const config = configService.config;
+
 gameDataService.gameData$
   .pipe(
     switchMap(async data => await table.display(data)),
@@ -56,7 +60,7 @@ gameDataService.gameData$
         if (isRateLimitError(err)) {
           spinner.fail("Table Creation Failed!, Rate Limited :(\n");
         } else {
-          if (isDevelopment()) {
+          if (isDevelopment() && !config.features["no-dev-logs"]) {
             console.error(err);
           }
           logger.error(err);

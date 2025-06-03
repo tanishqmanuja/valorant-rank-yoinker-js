@@ -16,7 +16,10 @@ const pluginsSchema = z.record(
 );
 
 const configSchema = z.object({
-  features: z.record(z.string(), z.boolean()).default({}),
+  features: z.record(z.string(), z.boolean()).default({
+    "auto-start-valorant": false,
+    "no-dev-logs": false,
+  }),
   plugins: pluginsSchema,
 });
 
