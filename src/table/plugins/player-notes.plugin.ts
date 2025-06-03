@@ -105,7 +105,7 @@ export const PlayerNotesPlugin = definePlugin({
 
         const isAlly = remarks?.isAlly ?? true;
 
-        let playerName = formatName({
+        const playerName = formatName({
           name: name.value,
           state: data._state,
           isHidden: name.isHidden && puuid !== api.puuid,
@@ -114,32 +114,36 @@ export const PlayerNotesPlugin = definePlugin({
           hiddenString: "HIDDEN",
         });
 
-        if (playerName === "HIDDEN") {
-          const agentName = formatAgent({
-            agent: tryCatch(
-              () => api.helpers.getAgent(agent!.id).displayName,
-              () => UNKNOWN_AGENT,
-            ),
-            isLocked: agent?.state === "locked",
-            state: data._state,
-            unknownString: UNKNOWN_AGENT,
-          });
-
-          playerName = agentName;
-        }
+        const agentName = formatAgent({
+          agent: tryCatch(
+            () => api.helpers.getAgent(agent!.id).displayName,
+            () => UNKNOWN_AGENT,
+          ),
+          isLocked: agent?.state === "locked",
+          state: data._state,
+          unknownString: UNKNOWN_AGENT,
+        });
 
         if (
-          (lastPlayedNote.length === 0 && compNote.length === 0) ||
-          !playerName ||
-          playerName === UNKNOWN_AGENT
+          (!playerName || playerName === "HIDDEN") &&
+          agentName === UNKNOWN_AGENT
         ) {
           continue;
         }
 
+        if (lastPlayedNote.length === 0 && compNote.length === 0) {
+          continue;
+        }
+
+        const displayName =
+          agentName === UNKNOWN_AGENT
+            ? playerName
+            : `${agentName} [${playerName}]`;
+
         table.notes.set(
           chalk.bold(
             formatName({
-              name: playerName,
+              name: displayName,
               state: data._state,
               isAlly,
               isInMyParty: partyService.isInMyParty(puuid),
