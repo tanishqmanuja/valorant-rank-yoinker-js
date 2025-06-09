@@ -7,8 +7,6 @@ import {
   map,
   merge,
   retry,
-  switchMap,
-  timer,
 } from "rxjs";
 
 import { ValorantConnection } from "~/connection";
@@ -80,10 +78,7 @@ export class MatchService {
     const matchIdApi$ = defer(() =>
       from(this.api.core.getCurrentGameMatchId()).pipe(retry({ delay: 2000 })),
     );
-    const matchId$ = merge(
-      matchIdWs$,
-      timer(1000).pipe(switchMap(() => matchIdApi$)),
-    ).pipe(filter(Boolean));
+    const matchId$ = merge(matchIdWs$, matchIdApi$).pipe(filter(Boolean));
 
     return firstValueFrom(matchId$);
   }
