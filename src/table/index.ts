@@ -191,7 +191,8 @@ export class Table {
 
     if (!isMenuData(this.data)) {
       t.map = this.api.helpers.getMap(this.data.match.data.MapID).displayName;
-      t.server = this.api.helpers.getServerName(this.data.match.data.GamePodID);
+      t.server =
+        this.api.helpers.getServerName(this.data.match.data.GamePodID) ?? "";
     }
 
     if (isPreGameData(this.data)) {

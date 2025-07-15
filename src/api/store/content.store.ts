@@ -18,15 +18,12 @@ import { GameContent } from "../types";
 
 const CACHE_FILENAME = "content.json";
 
-type GamePods = Record<string, string>;
-
 type CachedContent = {
   clientVersion: string;
   competitivetiers: Competitivetiers;
   agents: Agents;
   weapons: Weapons;
   maps: Maps;
-  gamepods: GamePods;
 };
 
 /* Prefetch content sits around 2.5MB */
@@ -46,14 +43,12 @@ export async function prefetchContent(
   await cache.read();
 
   if (cache.data?.clientVersion !== api.remote.options.clientVersion) {
-    const [agents, weapons, maps, competitivetiers, gamepods] =
-      await Promise.all([
-        offi.fetch("agents").then(res => res.data),
-        offi.fetch("weapons").then(res => res.data),
-        offi.fetch("maps").then(res => res.data),
-        offi.fetch("competitivetiers").then(res => res.data),
-        fetchGamepods(),
-      ]);
+    const [agents, weapons, maps, competitivetiers] = await Promise.all([
+      offi.fetch("agents").then(res => res.data),
+      offi.fetch("weapons").then(res => res.data),
+      offi.fetch("maps").then(res => res.data),
+      offi.fetch("competitivetiers").then(res => res.data),
+    ]);
 
     cache.data = {
       clientVersion: api.remote.options.clientVersion,
@@ -61,7 +56,6 @@ export async function prefetchContent(
       weapons,
       maps,
       competitivetiers,
-      gamepods,
     } satisfies CachedContent;
 
     await cache.write();
@@ -70,12 +64,4 @@ export async function prefetchContent(
   const gameContent = await api.core.getGameContent();
 
   return Object.assign(cache.data, gameContent) as PrefetchedContent;
-}
-
-/* Helpers */
-
-async function fetchGamepods(): Promise<GamePods> {
-  return axios
-    .get("https://valorant-api.com/internal/locres/en-US")
-    .then(res => res.data.data["UI_GamePodStrings"] as GamePods);
 }

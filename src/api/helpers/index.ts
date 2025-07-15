@@ -9,4 +9,4 @@ export * from "./match";
 export * from "./presences";
 export * from "./puuid";
 export * from "./weapon";
-export * from "./others";
+export * from "./gamepods";
