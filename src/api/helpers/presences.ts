@@ -11,6 +11,13 @@ import type {
   RawPresences,
 } from "../types";
 
+type PresencePrivate = Presence["private"] & {
+  matchPresenceData?: { sessionLoopState?: string } | null;
+  partyPresenceData?: { partyOwnerSessionLoopState?: string } | null;
+  partyOwnerSessionLoopState?: string;
+  queueId?: string | null;
+};
+
 export function isValorantPresence<T extends RawPresence | DecodedPresence>(
   presence: T,
 ): presence is T & { product: "valorant" } {
@@ -55,8 +62,40 @@ export function getSelfPresence<
   return presences.find(presence => presence.puuid === this.puuid)!;
 }
 
+function resolveSessionLoopState(privateData: PresencePrivate | undefined) {
+  if (!privateData) return undefined;
+
+  const candidates = [
+    privateData.sessionLoopState,
+    privateData.matchPresenceData?.sessionLoopState,
+    privateData.partyOwnerSessionLoopState,
+    privateData.partyPresenceData?.partyOwnerSessionLoopState,
+  ];
+
+  const explicitState = candidates.find(
+    (value): value is string => typeof value === "string" && value.length > 0,
+  );
+
+  if (explicitState) {
+    return explicitState;
+  }
+
+  if (privateData.matchPresenceData) {
+    return "INGAME";
+  }
+
+  if (privateData.queueId) {
+    return "PREGAME";
+  }
+
+  return undefined;
+}
+
 export function getGameState(selfPresence: Presence): GameState {
-  return match(selfPresence.private.sessionLoopState)
+  const privateData = selfPresence.private as PresencePrivate | undefined;
+  const sessionLoopState = resolveSessionLoopState(privateData);
+
+  return match(sessionLoopState)
     .with("MENUS", () => GAMESTATES.MENUS)
     .with("PREGAME", () => GAMESTATES.PREGAME)
     .with("INGAME", () => GAMESTATES.INGAME)
