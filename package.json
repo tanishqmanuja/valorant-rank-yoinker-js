@@ -1,6 +1,6 @@
 {
   "name": "vryjs",
-  "version": "0.3.4",
+  "version": "0.3.3",
   "description": "VALORANT Rank Yoinker JS",
   "repository": "tanishqmanuja/valorant-rank-yoinker-js",
   "type": "module",
@@ -75,5 +75,10 @@
     "yargs": "17.7.2",
     "zod": "^3.22.4"
   },
-  "packageManager": "pnpm@10.5.0"
+  "packageManager": "pnpm@10.5.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
 }
