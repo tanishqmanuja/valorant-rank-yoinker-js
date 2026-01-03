@@ -16,7 +16,7 @@ export const PlayerHeadshotPlugin = definePlugin({
       ]);
 
       for (const puuid in entities) {
-        const headshotRatio = entities[puuid]?.["headshot-ratio"];
+        const headshotRatio = entities[puuid]?.[HeadshotRatioEntity.id];
 
         table.grid.setCell({
           rowId: puuid,
@@ -32,7 +32,7 @@ export const PlayerHeadshotPlugin = definePlugin({
 });
 
 function formatHeadshotRatio(headshotRatio?: number): string {
-  if (!headshotRatio) {
+  if (headshotRatio === undefined) {
     return chalk.dim("N/A");
   }
 
