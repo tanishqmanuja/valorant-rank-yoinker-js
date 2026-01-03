@@ -27,9 +27,10 @@ plugins:
   
   # Options same as player-rank
   player-peak-rank:
-    style: short
+  style: short
   
   player-delta-rr: true
+  player-headshot: false
 
   # Count greator than 2 not recommended at all!
   player-matches:
