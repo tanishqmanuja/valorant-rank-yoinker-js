@@ -29,13 +29,13 @@ const __dirname = (await import("node:path")).dirname(__filename);
 const LIBSQL_FIX_BANNER = `
 // LibSQL Fixes
 import {Module} from "node:module"
-import path from 'path';
+import {join as __join} from "node:path"
 
 const originalLoad = Module._load
 Module._load = function (request, parent, isMain) {
   if (request === '@libsql/win32-x64-msvc') {
     // Return the real .node file
-    return require(path.join(__dirname, 'libsql.node'));
+    return require(__join(__dirname, 'libsql.node'));
   }
   return originalLoad.apply(this, arguments);
 };
