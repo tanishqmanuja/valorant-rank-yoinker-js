@@ -11,6 +11,7 @@ on:
           - patch
           - minor
           - major
+        default: patch
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
