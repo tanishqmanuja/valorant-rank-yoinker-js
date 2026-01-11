@@ -19,7 +19,8 @@
     "build:prod": "tsx scripts/build.ts --prod",
     "build": "pnpm build:prod",
     "type:check": "tsc --noEmit",
-    "release": "release-it"
+    "release": "release-it",
+    "test": "vitest run"
   },
   "keywords": [
     "valorant",
@@ -38,7 +39,8 @@
     "prettier": "^3.1.1",
     "release-it": "^17.0.1",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.16"
   },
   "dependencies": {
     "@libsql/client": "^0.15.7",

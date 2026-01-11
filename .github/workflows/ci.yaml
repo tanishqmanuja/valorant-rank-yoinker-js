@@ -33,6 +33,9 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: Test
+        run: pnpm turbo test
+
       - name: Build
         run: pnpm turbo build
 

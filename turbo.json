@@ -4,6 +4,18 @@
     "build": {
       "inputs": ["src/**/*", "pkg/**/*", "scripts/**"],
       "outputs": ["out/*"]
+    },
+    "test": {
+      "inputs": [
+        "src/**/*",
+        "tests/**/*",
+        "**/*.test.ts",
+        "vitest.config.*",
+        "tsconfig.json",
+        "package.json"
+      ],
+      "outputs": [],
+      "dependsOn": ["^test"]
     }
   }
 }
