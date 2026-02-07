@@ -63,7 +63,7 @@ export class PresenceService {
         const presences = this.api.helpers.decodePresences(
           payload.data.presences,
         );
-        this.#presences$.next(presences);
+        this.#presences$.next(presences.filter(p => p.private != null));
       },
     );
 

@@ -1,5 +1,7 @@
 import { match } from "ts-pattern";
 
+import { decodeBase64Json } from "~/utils/base64";
+
 import type { ValorantApi } from "..";
 import { GAMESTATES } from "../types";
 import type {
@@ -33,7 +35,7 @@ export function filterValorantPresences(
 export function decodePresence(presence: RawPresence): DecodedPresence {
   return {
     ...presence,
-    private: JSON.parse(atob(presence.private as string)),
+    private: decodeBase64Json(presence.private),
   } as DecodedPresence;
 }
 
@@ -44,7 +46,7 @@ export function decodePresences(
     .filter(presence => presence.product === "valorant")
     .map(presence => ({
       ...presence,
-      private: JSON.parse(atob(presence.private as string)),
+      private: decodeBase64Json(presence.private as string),
     })) as DecodedPresences;
 }
 
