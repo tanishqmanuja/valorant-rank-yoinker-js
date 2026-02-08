@@ -6,4 +6,6 @@ export default defineConfig({
     url: "file:./vryjs.db",
   },
   schema: "./src/db/schema.ts",
+  out: "./drizzle",
+  breakpoints: true
 });

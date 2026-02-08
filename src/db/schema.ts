@@ -38,3 +38,9 @@ export const lastPlayedStaging = sqliteTable("last_played_staging", {
   isAlly: integer("is_ally", { mode: "boolean" }).notNull(),
   millis: integer("millis").notNull(),
 });
+
+export const playerNames = sqliteTable("player_names", {
+  id: text("id").notNull().primaryKey(),
+  name: text("name").notNull(),
+  tag: text("tag").notNull(),
+});

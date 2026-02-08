@@ -20,7 +20,8 @@
     "build": "pnpm build:prod",
     "type:check": "tsc --noEmit",
     "release": "release-it",
-    "test": "vitest run"
+    "test": "vitest run",
+    "migrations:generate": "drizzle-kit generate && tsx scripts/bundle-migrations.ts"
   },
   "keywords": [
     "valorant",

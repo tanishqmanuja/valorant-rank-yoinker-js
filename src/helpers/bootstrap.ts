@@ -37,6 +37,9 @@ export async function doBootstrap() {
     await autoStartValorant();
   }
 
+  /* Database */
+  await initDB();
+
   /* Connection */
   const spinner = ora({
     prefixText: TAGS.link,
@@ -82,8 +85,6 @@ export async function doBootstrap() {
   /* Others */
   resolve(EntityManager);
   resolve(Table);
-
-  await initDB();
 
   enableHotkeys(() => gameDataService.requestUpdate());
 

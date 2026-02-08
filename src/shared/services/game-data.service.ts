@@ -1,5 +1,5 @@
 import { objectHash } from "ohash";
-import { Observable, Subject, merge, switchMap } from "rxjs";
+import { Observable, Subject, filter, merge, switchMap } from "rxjs";
 import { match } from "ts-pattern";
 
 import { ValorantApi } from "~/api";
@@ -44,6 +44,7 @@ export class GameDataService {
     ).pipe(switchMap(() => this.gameStateService.bufferedGameState$));
 
     this.gameData$ = sources$.pipe(
+      filter(state => state.curr !== GAMESTATES.UNKNOWN),
       switchMap(async state => {
         const data = await this.getStateData(state.curr);
         const hash = objectHash({
