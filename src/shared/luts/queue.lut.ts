@@ -14,6 +14,7 @@ export const QUEUE_NAME_LUT = {
   snowball: "Snowball Fight",
   swiftplay: "Swift Play",
   hurm: "Team Deathmatch",
+  valaram: "All Random One Site",
   "": "Custom",
 } as const;
 
