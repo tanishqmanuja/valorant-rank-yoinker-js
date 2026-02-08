@@ -50,7 +50,7 @@ export class PresenceService {
       from(this.api.core.getPresences()),
     ).pipe(
       tap(presences => {
-        this.#presences$.next(presences);
+        this.#presences$.next(presences.filter(p => Boolean(p.private)));
       }),
       retry({ count: 5, delay: 2000 }),
       take(1),
@@ -63,7 +63,7 @@ export class PresenceService {
         const presences = this.api.helpers.decodePresences(
           payload.data.presences,
         );
-        this.#presences$.next(presences.filter(p => p.private != null));
+        this.#presences$.next(presences.filter(p => Boolean(p.private)));
       },
     );
 
