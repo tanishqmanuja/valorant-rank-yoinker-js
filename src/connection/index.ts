@@ -3,9 +3,13 @@ import {
   LOG_FILE_PATH,
   ValorantApiClient,
   ValorantWebsocketClient,
+  VapicOptionsWithProviders,
   createValorantApiClient,
+  provideAuthViaLocalApi,
+  provideClientVersionAndRsoUserAgentViaVAPI,
+  provideLockFile,
+  useProviders,
 } from "@tqman/valorant-api-client";
-import { presets } from "@tqman/valorant-api-client/presets";
 import chalk from "chalk";
 import ora, { type Ora } from "ora";
 import {
@@ -29,6 +33,7 @@ import { sleep } from "~/utils/promise";
 import { isValorantRunning } from "~/utils/valorant";
 
 import { modifyApiBehaviour } from "./helpers";
+import { provideLogFile } from "./providers";
 
 type MergedApi = ValorantApi & { internal: ValorantApiClient };
 
@@ -39,7 +44,11 @@ const VAL_OPEN_DEBOUNCE_MS = 1000;
 const VAL_RECONNECT_DELAY_MS = 5 * 1000;
 
 // Config for authentication via local API
-const VAPIC_OPTIONS = presets.local;
+const VAPIC_OPTIONS = {
+  auth: useProviders(provideClientVersionAndRsoUserAgentViaVAPI()),
+  local: useProviders(provideLockFile()),
+  remote: useProviders([provideLogFile(), provideAuthViaLocalApi()]),
+} satisfies VapicOptionsWithProviders;
 
 const logger = LOGGER.forModule("Connection");
 
